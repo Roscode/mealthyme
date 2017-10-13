@@ -6,9 +6,9 @@ Database Design (CS3200) course project, essentially a meal/shopping planning ap
 
 ### Group members
 
-Darren Roscoe
-Trevor Fox
-Aidan Trager
+* Darren Roscoe
+* Trevor Fox
+* Aidan Trager
 
 ### Name of blackboard group
 
