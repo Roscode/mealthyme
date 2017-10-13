@@ -53,8 +53,13 @@ The data domains we will need to master for this project will include:
 
 ### Choice of database
 
-MySQL
+We will use a relational database system for this project, most likely MySQL.
 
 ### Software, Apps, Languages, Libraries, Hardware etc.
 
-I'm thinking an Elm-based web front-end, anything but javascript for the application server, and MySQL.
+We are currently evaluating the following stack:
+* An Elm-based web user interface
+* A Lisp (not sure which dialect yet) webserver implementing a REST interface
+* MySQL database connected to via a sql library such as CLSQL
+
+We want our backend to run as portably as possible to keep cloud hosting options simple to implement if we decide to do so, therefor we will develop for linux and/or use a containerization system such as docker.
