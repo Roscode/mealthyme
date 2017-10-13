@@ -44,8 +44,8 @@ The data domains we will need to master for this project will include:
     1. User asks the system for a shopping list
     2. The system compiles a list based on ingredients needed for coming meals which aren't in the pantry
 * Cook a meal
-    1. User selects a meal and marks it as made, optionally inputting any extra ingredients that were used.
-    2.The system updates the pantry accordingly
+    1. User selects a meal and marks it as made, optionally inputting any extra ingredients that were used
+    2. The system updates the pantry accordingly
 
 ### Choice of database
 
