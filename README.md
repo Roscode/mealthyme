@@ -37,15 +37,19 @@ The data domains we will need to master for this project will include:
 
 ### Use cases
 * Plan a meal
-    1. User queries the system for Recipes
-    2. User selects a recipe (or more than one), and a meal/time slot
-    3. The system adds the meal to the plan and updates the shopping list accordingly
-* Build a shopping list
-    1. User asks the system for a shopping list
-    2. The system compiles a list based on ingredients needed for coming meals which aren't in the pantry
+    1. The user queries the app for Recipes
+    2. The user selects a recipe (or more than one), and a meal/time slot
+    3. The app adds the meal to the user's plan
+* Go grocery shopping
+    1. The user queries the app for a shopping list for
+    2. The app provides a list of items to purchase in order to fill the pantry for the most future meals using the least cost (and possibly optimize other metrics in future version).
+    3. The user informs the app what was purchased and for how much and the app updates the pantry accordingly
+        * This step could be tedious, we may want to look into grocery store APIs or receipt reading libraries if either of those exist
 * Cook a meal
-    1. User selects a meal and marks it as made, optionally inputting any extra ingredients that were used
-    2. The system updates the pantry accordingly
+    1. The user selects a meal to make either from the plan or a list of recipes in the case of unplanned meals
+    2. The app provides the recipe(s) and directions (or a link thereto) for the meal
+    3. The user informs the app the meal is completed and optionally enters any extra ingredients used (in case of spillage and such)
+    4. The app records the food items used and updates the pantry accordingly
 
 ### Choice of database
 
