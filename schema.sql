@@ -13,76 +13,121 @@ drop table if exists households;
 drop table if exists users;
 drop table if exists foods;
 
-create table foods (
-    food_id int not null AUTO_INCREMENT PRIMARY KEY,
-    name varchar(128) not null,
-    img varchar(128)
+CREATE TABLE foods (
+    food_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    fname VARCHAR(128) NOT NULL,
+    img_path VARCHAR(128)
 );
 
-create table users (
-    user_id int not null AUTO_INCREMENT primary KEY,
-    username varchar(128) unique
+insert into foods (fname, img_path)
+values ("rice", "rice.jpg"), ("peanut butter", "pb.j(pg)"), ("jelly", "j.pg"), ("beans", "magicalfruit.jpg");
+
+CREATE TABLE users (
+    user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(128) UNIQUE
 );
 
-create table households (
-    household_id int not null AUTO_INCREMENT primary KEY
+insert into users (username) values ("roscode");
+
+CREATE TABLE households (
+    household_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    housename VARCHAR(128) NOT NULL
 );
 
-create table user_households (
-    user_id int not null,
-    household_id int not null,
-    foreign key (user_id) references users(user_id),
-    foreign key (household_id) references households(household_id),
-    unique (user_id, household_id)
+insert into households (housename) values ("roscode's house");
+
+CREATE TABLE user_households (
+    user_id INT NOT NULL,
+    household_id INT NOT NULL,
+    FOREIGN KEY (user_id)
+        REFERENCES users (user_id),
+    FOREIGN KEY (household_id)
+        REFERENCES households (household_id),
+    UNIQUE (user_id , household_id)
 );
 
-create table pantries (
-    pantry_id int not null AUTO_INCREMENT PRIMARY KEY
-    household_id int not null,
-    foreign key (household_id) references households(household_id),
-    unique (household_id)
+insert into user_households values (1, 1);
+
+CREATE TABLE pantries (
+    pantry_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    household_id INT NOT NULL,
+    FOREIGN KEY (household_id)
+        REFERENCES households (household_id),
+    UNIQUE (household_id)
 );
 
-create table pantry_foods (
-    pantry_id int not null,
-    food_id int not null,
-    foreign key (pantry_id) references pantries(pantry_id),
-    foreign key (food_id) references foods(food_id),
-    unique (pantry_id, food_id)
+insert into pantries (household_id) values (1);
+
+CREATE TABLE pantry_foods (
+    pantry_id INT NOT NULL,
+    food_id INT NOT NULL,
+    FOREIGN KEY (pantry_id)
+        REFERENCES pantries (pantry_id),
+    FOREIGN KEY (food_id)
+        REFERENCES foods (food_id),
+    UNIQUE (pantry_id , food_id)
 );
 
-create table shopping_lists (
-    household_id int not null,
-    food_id int not null,
-    foreign key (household_id) references households(household_id),
-    foreign key (food_id) references foods(food_id),
-    unique (food_id, household_id)
+insert into pantry_foods values (1, 1), (1, 2), (1, 3), (1, 4);
+
+-- test query: Get all foods in a users pantry
+SELECT 
+    food_id, fname, img_path
+FROM
+    foods
+        JOIN
+    pantry_foods USING (food_id)
+        JOIN
+    pantries USING (pantry_id)
+WHERE
+    household_id = (SELECT 
+            household_id
+        FROM
+            users
+                JOIN
+            user_households USING (user_id)
+        WHERE
+            user_id = 1);
+
+CREATE TABLE shopping_lists (
+    household_id INT NOT NULL,
+    food_id INT NOT NULL,
+    FOREIGN KEY (household_id)
+        REFERENCES households (household_id),
+    FOREIGN KEY (food_id)
+        REFERENCES foods (food_id),
+    UNIQUE (food_id , household_id)
 );
 
-create table recipes (
-    recipe_id int not null AUTO_INCREMENT primary key,
-    cuisine varchar(128),
+CREATE TABLE recipes (
+    recipe_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    cuisine VARCHAR(128),
     directions TEXT
 );
 
-create table recipe_ingredients (
-    recipe_id int not null,
-    food_id int not null,
-    foreign KEY (recipe_id) references recipes(recipe_id),
-    foreign key (food_id) references foods(food_id),
-    unique (recipe_id, food_id)
+CREATE TABLE recipe_ingredients (
+    recipe_id INT NOT NULL,
+    food_id INT NOT NULL,
+    FOREIGN KEY (recipe_id)
+        REFERENCES recipes (recipe_id),
+    FOREIGN KEY (food_id)
+        REFERENCES foods (food_id),
+    UNIQUE (recipe_id , food_id)
 );
 
-create table meals (
-    meal_id int not null AUTO_INCREMENT PRIMARY KEY,
-    name varchar(128) not null
+CREATE TABLE meals (
+    meal_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(128) NOT NULL
 );
 
-create table meal_recipes (
-    meal_id int not null,
-    recipe_id int not null,
-    multiplicity int not null,
-    foreign key (meal_id) references meals(meal_id),
-    foreign key (recipe_id) references recipes(recipe_id),
-    unique (meal_id, recipe_id)
+CREATE TABLE meal_recipes (
+    meal_id INT NOT NULL,
+    recipe_id INT NOT NULL,
+    multiplicity INT NOT NULL,
+    FOREIGN KEY (meal_id)
+        REFERENCES meals (meal_id),
+    FOREIGN KEY (recipe_id)
+        REFERENCES recipes (recipe_id),
+    UNIQUE (meal_id , recipe_id)
 );
+
