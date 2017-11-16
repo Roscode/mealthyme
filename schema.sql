@@ -62,8 +62,10 @@ CREATE TABLE shopping_lists (
 
 CREATE TABLE recipes (
     recipe_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    recipe_name varchar(128),
     cuisine VARCHAR(128),
-    directions TEXT
+    servings int,
+    course varchar(45)
 );
 
 CREATE TABLE recipe_ingredients (
@@ -78,7 +80,8 @@ CREATE TABLE recipe_ingredients (
 
 CREATE TABLE meals (
     meal_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(128) NOT NULL
+    meal_name VARCHAR(128) NOT NULL,
+    description TEXT
 );
 
 CREATE TABLE meal_recipes (
