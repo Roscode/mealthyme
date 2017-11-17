@@ -12,19 +12,17 @@ drop table if exists foods;
 
 CREATE TABLE foods (
     food_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    fname VARCHAR(128) NOT NULL,
+    food_name VARCHAR(128) NOT NULL,
     img_path VARCHAR(128)
 );
-
-insert into foods (fname, img_path)
-values ("rice", "rice.jpg"), ("peanut butter", "pb.j(pg)"), ("jelly", "j.pg"), ("beans", "magicalfruit.jpg");
+select * from foods;
 
 CREATE TABLE users (
     user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(128) UNIQUE
 );
 
-insert into users (username) values ("roscode");
+insert into users (username) values ('roscode');
 
 CREATE TABLE pantry_contents (
     user_id INT NOT NULL,
@@ -35,9 +33,6 @@ CREATE TABLE pantry_contents (
         REFERENCES foods (food_id),
     UNIQUE (user_id , food_id)
 );
-
-insert into pantry_contents values (1, 1), (1, 2), (1, 3), (1, 4);
-
 
 CREATE TABLE shopping_list_contents (
     user_id INT NOT NULL,
