@@ -36,6 +36,8 @@ When we first found the yummly API we were minorly disheartened since the yummly
 
 ### End User Interactions
 
+See [Activity_Diagram.png](https://github.com/Roscode/mealthyme/blob/master/Activity_Diagram.png) for an activity diagram of the following.
+
 #### Add Stuff to pantry
 
 * Create food for each type of item in the real pantry
