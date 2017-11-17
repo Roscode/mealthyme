@@ -5,9 +5,8 @@ drop table if exists meal_recipes;
 drop table if exists meals;
 drop table if exists recipe_ingredients;
 drop table if exists recipes;
-drop table if exists shopping_lists;
-drop table if exists pantry_foods;
-drop table if exists pantries;
+drop table if exists shopping_list_contents;
+drop table if exists pantry_contents;
 drop table if exists users;
 drop table if exists foods;
 
@@ -27,30 +26,20 @@ CREATE TABLE users (
 
 insert into users (username) values ("roscode");
 
-CREATE TABLE pantries (
-    pantry_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE pantry_contents (
     user_id INT NOT NULL,
+    food_id INT NOT NULL,
     FOREIGN KEY (user_id)
         REFERENCES users (user_id),
-    UNIQUE (user_id)
-);
-
-insert into pantries (user_id) values (1);
-
-CREATE TABLE pantry_foods (
-    pantry_id INT NOT NULL,
-    food_id INT NOT NULL,
-    FOREIGN KEY (pantry_id)
-        REFERENCES pantries (pantry_id),
     FOREIGN KEY (food_id)
         REFERENCES foods (food_id),
-    UNIQUE (pantry_id , food_id)
+    UNIQUE (user_id , food_id)
 );
 
-insert into pantry_foods values (1, 1), (1, 2), (1, 3), (1, 4);
+insert into pantry_contents values (1, 1), (1, 2), (1, 3), (1, 4);
 
 
-CREATE TABLE shopping_lists (
+CREATE TABLE shopping_list_contents (
     user_id INT NOT NULL,
     food_id INT NOT NULL,
     FOREIGN KEY (user_id)
@@ -94,4 +83,3 @@ CREATE TABLE meal_recipes (
         REFERENCES recipes (recipe_id),
     UNIQUE (meal_id , recipe_id)
 );
-
