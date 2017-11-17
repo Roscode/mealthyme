@@ -20,7 +20,7 @@ This projects aims to provide a single user with an (relatively) automated way t
 
 ### Model
 
-Please (go to the repo) and see the schema.sql file and the er_diagram for database structure. We are currently not going to concern ourselves with amounts of food because of the complexity there (i.e. buying a pound of flour and using "a little more than" 3 cups is difficult to model effectively), but as we get further into the project we will attempt to introduce it, so we're boing to build the system with that forethought.
+Please (go to the repo) and see schema.sql and er_diagram.pdf for database structure. We are currently not going to concern ourselves with amounts of food because of the complexity there (i.e. buying a pound of flour and using "a little more than" 3 cups is difficult to model effectively), but as we get further into the project we will attempt to introduce it, so we're boing to build the system with that forethought.
 
 ### Users of the database system
 
