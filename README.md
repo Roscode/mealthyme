@@ -16,18 +16,11 @@ Fox-Roscoe-Trager
 
 ### Top level description
 
-This projects aims to provide a single user (or household) with an easy and automated way to plan their grocery shopping and meal preparation. Many college students and people in general, ourselves included, find it difficult to efficiently plan their meals and shopping and as a result end up wasting food that goes bad, money to order food or go out, and time trying to organize everything by hand. Poor meal planning can also contribute to weight gain as the easiest meals aren't necessarily the healthiest.
+This projects aims to provide a single user with an (relatively) automated way to plan their grocery shopping and meal preparation. Many college students and people in general, ourselves included, find it difficult to efficiently plan their meals and shopping and as a result end up wasting food that goes bad, money to order food or go out, and time trying to organize everything by hand. Poor meal planning can also contribute to weight gain as the easiest meals aren't necessarily the healthiest.
 
-The data domains we will need to master for this project will include:
-* Food items including amount, price, and possibly nutritional data.
-* Recipes and their relationship to food items especially regarding amount.
-* Time. We will need to keep track of days, weeks, and possibly months in advance to really optimize for cost.
-* Meals will likely be among the most complex entity/set of entities and relationships in the model, since they will need to relate to almost all other entities and represent much of the most crucial information for the app.
-* Users will be represented of course.
-* Households will be collections of users to allow for more than one person to collaborate on meal planning.
-* A Pantry will represent the collection of food items available to a household.
-* A Shopping list will represent the set of food needed for some future meals that isn't present in the Pantry
-* Probably more we haven't thought of yet.
+### Model
+
+Please (go to the repo) and see the schema.sql file and the er_diagram for database structure. We are currently not going to concern ourselves with amounts of food because of the complexity there (i.e. buying a pound of flour and using "a little more than" 3 cups is difficult to model effectively), but as we get further into the project we will attempt to introduce it, so we're boing to build the system with that forethought.
 
 ### Users of the database system
 
@@ -35,34 +28,67 @@ The data domains we will need to master for this project will include:
 2. Application/Developers
 3. DB Admins
 
-### Use cases
-* Plan a meal
-    1. The user queries the app for Recipes
-    2. The user selects a recipe (or more than one), and a meal/time slot
-    3. The app adds the meal to the user's plan
-* Go grocery shopping
-    1. The user queries the app for a shopping list for
-    2. The app provides a list of items to purchase in order to fill the pantry for the most future meals using the least cost (and possibly optimize other metrics in future version).
-    3. The user informs the app what was purchased and for how much and the app updates the pantry accordingly
-        * This step could be tedious, we may want to look into grocery store APIs or receipt reading libraries if either of those exist
-* Cook a meal
-    1. The user selects a meal to make either from the plan or a list of recipes in the case of unplanned meals
-    2. The app provides the recipe(s) and directions (or a link thereto) for the meal
-    3. The user informs the app the meal is completed and optionally enters any extra ingredients used (in case of spillage and such)
-    4. The app records the food items used and updates the pantry accordingly
+### User stories
+
+#### Add Stuff to pantry
+
+* create food for each type of item in the real pantry
+* create a food items for each item in the real pantry
+    * User inputs price when possible, we'll deal with that later
+    * amounts are tough, converting between weights and volumes frequently, for now the user will just input when they are low/out of something
+* created food items are automatically added to the pantry
+* combine different items of the same food type
+
+#### Recipe/Meal Creation
+
+* A user can manually create a recipe
+    * User creates food for items in the recipe
+    * User creates the recipe
+    * a compilation food and amounts
+    * directions, time serving size etc.
+* Or they can search the api
+    * search by different concepts (cuisine, nutrition maybe, food contents, diet)
+* either way add recipes to a meal
+* save the meal
+
+
+#### Plan a meal
+
+* choose a date to make the meal
+* The necessary ingredients which are not in your pantry are added to your shopping list
+
+#### Go shopping
+
+* display the shopping list
+* check off items as you go for convenience
+* afterwards, you input prices for everything (optional) and amounts (maybe)
+* those things are added to your pantry
+* items are removed from shopping list
+
+#### Make a meal
+
+* Select a meal as to be prepared
+* Gives you the directions or a link or whatever
+* when you mark as made it asks if you are out of any of the items
+    * if so remove from pantry
+
+#### Have a snack
+
+* Remove specific items from the pantry
+* They were eaten or went bad or something
 
 ### Choice of database
 
-We will use a relational database system for this project, most likely MySQL.
+We will use MySQL.
 
 ### Software, Apps, Languages, Libraries, Hardware etc.
 
-We are currently evaluating the following stack:
+We are beginning to implement using the following stack:
 * An Elm-based web user interface
-* A Lisp (not sure which dialect yet) webserver implementing a REST interface
-* MySQL database connected to via a sql library such as CLSQL
+* A Racket HTTP application server
+* MySQL database connection using the racket db package
 
-We want our backend to run as portably as possible to keep cloud hosting options simple to implement if we decide to do so, therefor we will develop for linux and/or use a containerization system such as docker.
+We want our backend to run as portably as possible to keep cloud hosting options simple to implement if we decide to do so, therefore we will develop for linux and/or use a containerization system such as docker.
 
 ### Link to the repo
 
