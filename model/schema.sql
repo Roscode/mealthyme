@@ -15,7 +15,14 @@ CREATE TABLE foods (
     food_name VARCHAR(128) NOT NULL,
     img_path VARCHAR(128)
 );
-select * from foods;
+
+delimiter //
+drop procedure if exists get_all_food //
+create procedure get_all_food()
+begin
+select food_name from foods;
+end //
+delimiter ;
 
 CREATE TABLE users (
     user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
