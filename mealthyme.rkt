@@ -14,8 +14,20 @@
 
 
 (get "/food"
-     (lambda ()
-       (jsexpr->string (query-list db "select food_name from foods;"))))
+     (lambda (req)
+       (jsexpr->string (query-list db "call get_all_food()"))))
+
+(post "/food"
+      (lambda (req)
+        (query-exec db "insert into foods (food_name) values (?)" (params req 'food_name))
+        "Posted"))
+
+(get "/food/:id"
+     (lambda (req)
+       (jsexpr->string (query-value
+                        db
+                        "select food_name from foods where food_id = ?"
+                        (params req 'id)))))
 
 (define (json-response-maker status headers body)
   (response status
