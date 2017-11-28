@@ -34,13 +34,21 @@ module.exports = {
                 test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 loader: 'file-loader'
             },
+            {
+                test: /\.elm$/,
+                exclude: [/elm-stuff/, /node_modules/],
+                use: {
+                    loader: 'elm-webpack-loader',
+                    options: {}
+                }
+            }
         ],
-
-        noParse: /\.elm$/,
     },
 
     devServer: {
-        inline: true.
-        stats: { colors: true }
+        inline: true,
+        stats: {
+            colors: true
+        }
     }
 };
