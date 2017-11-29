@@ -1,6 +1,6 @@
 module View exposing (..)
 
-import Html exposing (Attribute, Html, button, div, input, li, text, ul)
+import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Models exposing (Model)
@@ -10,8 +10,14 @@ import Msgs exposing (Msg(..))
 renderLogin : Model -> Html Msg
 renderLogin model =
     div []
-        [ input [ type_ "text", placeholder "Username", onInput Username ] []
-        , button [ onClick LoginUser ] [ text "Login/Signup" ]
+        [ input
+            [ type_ "text"
+            , placeholder "Username"
+            , onInput Username
+            , class "input"
+            ]
+            []
+        , button [ onClick LoginUser, class "button is-link" ] [ text "Login/Signup" ]
         ]
 
 
@@ -24,14 +30,28 @@ renderHomepage model =
 
         Just p ->
             div []
-                [ input [ type_ "text", placeholder "Food", onInput FoodInput ] []
-                , button [ onClick Search ] [ text "Search Food" ]
-                , text "Food Search Results"
-                , ul []
-                    (List.map renderFood model.foodPairs)
-                , text "Pantry contents"
-                , ul []
-                    (List.map renderPantryItem p)
+                [ input
+                    [ type_ "text"
+                    , placeholder "Food"
+                    , onInput FoodInput
+                    , class "input"
+                    ]
+                    []
+                , button [ onClick Search, class "button is-link" ] [ text "Search Food" ]
+                , section [ class "section" ]
+                    [ div [ class "container" ]
+                        [ h1 [ class "title" ] [ text "Food Search results" ]
+                        , ul []
+                            (List.map renderFood model.foodPairs)
+                        ]
+                    ]
+                , section [ class "section" ]
+                    [ div [ class "container" ]
+                        [ h1 [ class "title" ] [ text "Pantry Contents" ]
+                        , ul []
+                            (List.map renderPantryItem p)
+                        ]
+                    ]
                 ]
 
 
@@ -46,6 +66,24 @@ renderFood ( name, id ) =
 
 view : Model -> Html Msg
 view model =
+    div []
+        [ section [ class "hero is-primary" ]
+            [ div [ class "hero-body" ]
+                [ div [ class "container" ]
+                    [ h1 [ class "title" ]
+                        [ text "Mealthyme" ]
+                    , h2
+                        [ class "subtitle" ]
+                        [ text "Darren Roscoe and Trevor Fox" ]
+                    ]
+                ]
+            ]
+        , base model
+        ]
+
+
+base : Model -> Html Msg
+base model =
     case model.userId of
         Nothing ->
             renderLogin model
