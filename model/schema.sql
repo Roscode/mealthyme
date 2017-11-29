@@ -26,12 +26,35 @@ delimiter ;
 
 CREATE TABLE users (
     user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(128) UNIQUE
+    username VARCHAR(128) UNIQUE not null
 );
 
 insert into users (username) values ('roscode');
 
+delimiter //
+drop function if exists login_signup //
+create function login_signup
+(
+	uname varchar(128)
+)
+returns int
+begin
+insert ignore into users (username) values (uname);
+return (SELECT 
+    (user_id)
+FROM
+    users
+WHERE
+    username = uname);
+
+end //
+
+delimiter ;
+
+select * from users;
+
 CREATE TABLE pantry_contents (
+
     user_id INT NOT NULL,
     food_id INT NOT NULL,
     FOREIGN KEY (user_id)
@@ -40,6 +63,35 @@ CREATE TABLE pantry_contents (
         REFERENCES foods (food_id),
     UNIQUE (user_id , food_id)
 );
+
+insert into pantry_contents values (1, 1);
+
+delimiter //
+drop procedure if exists user_pantry //
+create procedure user_pantry
+(
+	uid int
+)
+begin
+SELECT 
+    (food_name)
+FROM
+    foods f
+WHERE
+    f.food_id IN (SELECT 
+            (food_id)
+        FROM
+            users
+                JOIN
+            pantry_contents USING (user_id)
+                JOIN
+            foods USING (food_id)
+        WHERE
+            user_id = uid);
+end //
+delimiter ;
+
+select * from foods where food_name like '%egg%' limit 15;
 
 CREATE TABLE shopping_list_contents (
     user_id INT NOT NULL,
@@ -53,10 +105,10 @@ CREATE TABLE shopping_list_contents (
 
 CREATE TABLE recipes (
     recipe_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    recipe_name varchar(128),
+    recipe_name VARCHAR(128),
     cuisine VARCHAR(128),
-    servings int,
-    course varchar(45)
+    servings INT,
+    course VARCHAR(45)
 );
 
 CREATE TABLE recipe_ingredients (

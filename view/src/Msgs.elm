@@ -1,5 +1,13 @@
 module Msgs exposing (..)
 
+import Http exposing (..)
+
 
 type Msg
-    = Hey
+    = Username String
+    | LoginUser
+    | UserId (Result Http.Error Int)
+    | Pantry (Result Http.Error (List String))
+    | FoodInput String
+    | Search
+    | Foods (Result Http.Error (List ( String, Int )))
