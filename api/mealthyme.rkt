@@ -14,11 +14,12 @@
                  #:database "mealthyme"
                  #:user "mealthyme"))
 
+(define cors-header (header #"Access-Control-Allow-Origin" #"*"))
+
 (get "/login"
       (lambda (req)
-        (define h (header #"Access-Control-Allow-Origin" #"*"))
         (list 200
-              (list h)
+              (list cors-header)
               (jsexpr->string
                 (hash 'userId
                       (query-value db
@@ -26,9 +27,8 @@
 
 (get "/pantry"
      (lambda (req)
-       (define h (header #"Access-Control-Allow-Origin" #"*"))
        (list 200
-             (list h)
+             (list cors-header)
              (jsexpr->string
               (hash 'items
                     (query-list db
@@ -36,11 +36,26 @@
                                                (params req 'uid)
                                                ")")))))))
 
+(get "/add"
+     (lambda (req)
+       (list 200
+             (list cors-header)
+             (begin
+               (query-exec db
+                           "insert ignore into pantry_contents (user_id, food_id) values (?, ?)"
+                           (params req 'u)
+                           (params req 'f))
+               (jsexpr->string
+                (hash 'items
+                      (query-list db
+                                  (string-append "call user_pantry("
+                                                 (params req 'u)
+                                                 ")"))))))))
+
 (get "/foods"
      (lambda (req)
-       (define h (header #"Access-Control-Allow-Origin" #"*"))
        (list 200
-             (list h)
+             (list cors-header)
              (jsexpr->string
               (hash 'foods
                     (make-hasheq (for/list
@@ -56,13 +71,6 @@
 (post "/food"
       (lambda (req)
         (query-exec db "insert into foods (food_name) values (?)" (params req 'food_name))))
-
-(get "/food/:id"
-     (lambda (req)
-       (jsexpr->string (query-value
-                        db
-                        "select food_name from foods where food_id = ?"
-                        (params req 'id)))))
 
 (define (json-response-maker status headers body)
   (response status

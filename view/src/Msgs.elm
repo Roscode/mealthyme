@@ -11,3 +11,4 @@ type Msg
     | FoodInput String
     | Search
     | Foods (Result Http.Error (List ( String, Int )))
+    | AddFood Int

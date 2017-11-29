@@ -107,3 +107,22 @@ update msg model =
 
                 Ok fps ->
                     ( { model | foodPairs = fps }, Cmd.none )
+
+        AddFood foodId ->
+            Debug.log (toString foodId)
+                ( model, addToPantry foodId (Maybe.withDefault 0 model.userId) )
+
+
+addToPantry : Int -> Int -> Cmd Msg
+addToPantry foodId userId =
+    let
+        url =
+            "http://localhost:8000/add?u="
+                ++ Http.encodeUri (toString userId)
+                ++ "&f="
+                ++ Http.encodeUri (toString foodId)
+
+        request =
+            Http.get url decodePantry
+    in
+    Http.send Pantry request

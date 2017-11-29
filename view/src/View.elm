@@ -36,9 +36,12 @@ renderHomepage model =
 
 
 renderFood : ( String, Int ) -> Html Msg
-renderFood foodPair =
+renderFood ( name, id ) =
     li []
-        [ text (Tuple.first foodPair) ]
+        [ text name
+        , button [ onClick (AddFood id) ]
+            [ text "Add to pantry" ]
+        ]
 
 
 view : Model -> Html Msg
