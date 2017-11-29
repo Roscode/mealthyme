@@ -37,36 +37,53 @@ renderHomepage model =
                     , class "input"
                     ]
                     []
-                , button [ onClick Search, class "button is-link" ] [ text "Search Food" ]
-                , section [ class "section" ]
-                    [ div [ class "container" ]
-                        [ h1 [ class "title" ] [ text "Food Search results" ]
-                        , ul []
-                            (List.map renderFood model.foodPairs)
-                        ]
-                    ]
-                , section [ class "section" ]
-                    [ div [ class "container" ]
-                        [ h1 [ class "title" ] [ text "Pantry Contents" ]
-                        , ul []
-                            (List.map renderPantryItem p)
-                        ]
+                , button [ onClick Search, class "button is-link" ]
+                    [ text "Search Food" ]
+                , renderPantryResults
+                    p
+                    model.foodPairs
+                ]
+
+
+renderPantryResults : List String -> List ( String, Int ) -> Html Msg
+renderPantryResults pantry foodPairs =
+    div [ class "columns" ]
+        [ div [ class "column is-half" ]
+            [ section [ class "section" ]
+                [ div [ class "container" ]
+                    [ h1 [ class "title" ] [ text "Pantry Contents" ]
+                    , ul []
+                        (List.map renderPantryItem pantry)
                     ]
                 ]
+            ]
+        , div [ class "column is-half" ]
+            [ section [ class "section" ]
+                [ div [ class "container" ]
+                    [ h1 [ class "title" ] [ text "Food Search results" ]
+                    , ul []
+                        (List.map renderFood foodPairs)
+                    ]
+                ]
+            ]
+        ]
 
 
 renderFood : ( String, Int ) -> Html Msg
 renderFood ( name, id ) =
     li []
         [ text name
-        , button [ onClick (AddFood id) ]
-            [ text "Add to pantry" ]
+        , button
+            [ onClick (AddFood id)
+            , class "button is-link"
+            ]
+            [ text "Add to Pantry" ]
         ]
 
 
 view : Model -> Html Msg
 view model =
-    div []
+    div [ class "container" ]
         [ section [ class "hero is-primary" ]
             [ div [ class "hero-body" ]
                 [ div [ class "container" ]
