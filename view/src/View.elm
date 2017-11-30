@@ -72,12 +72,16 @@ renderPantryResults pantry foodPairs =
 renderFood : ( String, Int ) -> Html Msg
 renderFood ( name, id ) =
     li []
-        [ text name
-        , button
-            [ onClick (AddFood id)
-            , class "button is-link"
+        [ p [ class "field" ]
+            [ a
+                [ onClick (AddFood id)
+                , class "button is-success"
+                ]
+                [ span [ class "icon is-small" ]
+                    [ i [ class "fa fa-check" ] [] ]
+                , span [] [ text name ]
+                ]
             ]
-            [ text "Add to Pantry" ]
         ]
 
 
