@@ -24,34 +24,6 @@
                 (hash 'userId
                       (query-value db
                                    "select login_signup(?)" (params req 'username)))))))
-
-(get "/pantry"
-     (lambda (req)
-       (list 200
-             (list cors-header)
-             (jsexpr->string
-              (hash 'items
-                    (query-list db
-                                (string-append "call user_pantry("
-                                               (params req 'uid)
-                                               ")")))))))
-
-(get "/add"
-     (lambda (req)
-       (list 200
-             (list cors-header)
-             (begin
-               (query-exec db
-                           "insert ignore into pantry_contents (user_id, food_id) values (?, ?)"
-                           (params req 'u)
-                           (params req 'f))
-               (jsexpr->string
-                (hash 'items
-                      (query-list db
-                                  (string-append "call user_pantry("
-                                                 (params req 'u)
-                                                 ")"))))))))
-
 (get "/foods"
      (lambda (req)
        (list 200
@@ -65,8 +37,62 @@
                                                (string-append
                                                 "select food_id, food_name from foods where food_name like '%"
                                                 (params req 'q)
-                                                "%' limit 15")))])
+                                                "%' and food_id not in (Select food_id from pantry_contents where user_id = "
+                                                (params req 'u)
+                                                ")
+ limit 15")))])
                       (cons (string->symbol (vector-ref row 1)) (vector-ref row 0)))))))))
+
+(get "/pantry"
+     (lambda (req)
+       (list 200
+             (list cors-header)
+             (jsexpr->string
+              (hash 'foods
+                    (make-hasheq
+                     (for/list
+                         ([row (in-list (query-rows db
+                                                    "select food_id, food_name from foods join pantry_contents using (food_id) where user_id = ?"
+                                                    (params req 'uid)))])
+                       (cons (string->symbol (vector-ref row 1)) (vector-ref row 0)))))))))
+
+(get "/add"
+     (lambda (req)
+       (list 200
+             (list cors-header)
+             (begin
+               (query-exec db
+                           "insert ignore into pantry_contents (user_id, food_id) values (?, ?)"
+                           (params req 'u)
+                           (params req 'f))
+               (jsexpr->string
+                (hash 'foods
+                    (make-hasheq
+                     (for/list
+                         ([row (in-list (query-rows db
+                                                    "select food_id, food_name from foods join pantry_contents using (food_id) where user_id = ?"
+                                                    (params req 'u)))])
+                       (cons (string->symbol (vector-ref row 1)) (vector-ref row 0))))))))))
+
+(get "/remove"
+     (lambda (req)
+       (list 200
+             (list cors-header)
+             (begin
+               (query-exec db
+                           "delete from pantry_contents where user_id = ? and food_id = ?"
+                           (params req 'u)
+                           (params req 'f))
+               (jsexpr->string
+                (hash 'foods
+                      (make-hasheq
+                       (for/list
+                           ([row (in-list (query-rows db
+                                                      "select food_id, food_name from foods join pantry_contents using (food_id) where user_id = ?"
+                                                      (params req 'u)))])
+                         (cons (string->symbol (vector-ref row 1)) (vector-ref row 0))))))))))
+
+
 
 (post "/food"
       (lambda (req)

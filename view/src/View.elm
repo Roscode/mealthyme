@@ -23,26 +23,20 @@ renderLogin model =
 
 renderHomepage : Model -> Html Msg
 renderHomepage model =
-    case model.pantry of
-        Nothing ->
-            div []
-                [ text (toString model.userId) ]
-
-        Just p ->
-            div []
-                [ input
-                    [ type_ "text"
-                    , placeholder "Food"
-                    , onInput FoodInput
-                    , class "input"
-                    ]
-                    []
-                , button [ onClick Search, class "button is-link" ]
-                    [ text "Search Food" ]
-                , renderPantryResults
-                    p
-                    model.foodPairs
-                ]
+    div []
+        [ input
+            [ type_ "text"
+            , placeholder "Food"
+            , onInput FoodInput
+            , class "input"
+            ]
+            []
+        , button [ onClick Search, class "button is-link" ]
+            [ text "Search Food" ]
+        , renderPantryResults
+            model.pantry
+            model.foodPairs
+        ]
 
 
 renderPantryResults : List ( String, Int ) -> List ( String, Int ) -> Html Msg
@@ -64,22 +58,6 @@ renderPantryResults pantry foodPairs =
                     , ul []
                         (List.map renderFood foodPairs)
                     ]
-                ]
-            ]
-        ]
-
-
-renderFood : ( String, Int ) -> Html Msg
-renderFood ( name, id ) =
-    li []
-        [ p [ class "field" ]
-            [ a
-                [ onClick (AddFood id)
-                , class "button is-success"
-                ]
-                [ span [ class "icon is-small" ]
-                    [ i [ class "fa fa-check" ] [] ]
-                , span [] [ text name ]
                 ]
             ]
         ]
@@ -116,6 +94,30 @@ base model =
 renderPantryItem : ( String, Int ) -> Html Msg
 renderPantryItem ( name, id ) =
     li []
-        [ text name
-        , button [ onClick (RemoveFood id) ] [ text "REMOVE" ]
+        [ p [ class "field" ]
+            [ a
+                [ onClick (RemoveFood id)
+                , class "button is-link"
+                ]
+                [ span [ class "icon has-text-danger" ]
+                    [ i [ class "fa fa-lg  fa-sign-out" ] [] ]
+                , span [] [ text name ]
+                ]
+            ]
+        ]
+
+
+renderFood : ( String, Int ) -> Html Msg
+renderFood ( name, id ) =
+    li []
+        [ p [ class "field" ]
+            [ a
+                [ onClick (AddFood id)
+                , class "button is-warning"
+                ]
+                [ span [ class "icon has-text-success" ]
+                    [ i [ class "fa fa-lg fa-sign-out fa-flip-horizontal" ] [] ]
+                , span [] [ text name ]
+                ]
+            ]
         ]

@@ -17,7 +17,7 @@ loginUser username =
         request =
             Http.get url decodeLogin
     in
-    Http.send UserId request
+        Http.send UserId request
 
 
 decodeLogin : Decode.Decoder Int
@@ -32,26 +32,9 @@ getUserPantry uid =
             "http://localhost:8000/pantry?uid=" ++ toString uid
 
         request =
-            Http.get url decodePantry
-    in
-    Http.send Pantry request
-
-
-decodePantry : Decode.Decoder (List String)
-decodePantry =
-    Decode.at [ "items" ] (Decode.list Decode.string)
-
-
-searchFood : String -> Cmd Msg
-searchFood name =
-    let
-        url =
-            "http://localhost:8000/foods?q=" ++ name
-
-        request =
             Http.get url decodeFoods
     in
-    Http.send Foods request
+        Http.send Pantry request
 
 
 decodeFoods : Decode.Decoder (List ( String, Int ))
@@ -91,13 +74,13 @@ update msg model =
 
                 Ok items ->
                     Debug.log (toString items)
-                        ( { model | pantry = Just items }, Cmd.none )
+                        ( { model | pantry = items }, Cmd.none )
 
         FoodInput input ->
             ( { model | foodinput = input }, Cmd.none )
 
         Search ->
-            ( model, searchFood model.foodinput )
+            ( model, searchFood model.foodinput (Maybe.withDefault 0 model.userId) )
 
         Foods foodPairs ->
             case foodPairs of
@@ -127,13 +110,13 @@ addToPantry foodId userId =
                 ++ Http.encodeUri (toString foodId)
 
         request =
-            Http.get url decodePantry
+            Http.get url decodeFoods
     in
-    Http.send Pantry request
+        Http.send Pantry request
 
 
 removeFromPantry : Int -> Int -> Cmd Msg
-removeFromPanty foodId userId =
+removeFromPantry foodId userId =
     let
         url =
             "http://localhost:8000/remove?u="
@@ -142,6 +125,21 @@ removeFromPanty foodId userId =
                 ++ Http.encodeUri (toString foodId)
 
         request =
-            Http.get url decodePantry
+            Http.get url decodeFoods
     in
-    Http.send Pantry request
+        Http.send Pantry request
+
+
+searchFood : String -> Int -> Cmd Msg
+searchFood name userId =
+    let
+        url =
+            "http://localhost:8000/foods?q="
+                ++ name
+                ++ "&u="
+                ++ Http.encodeUri (toString userId)
+
+        request =
+            Http.get url decodeFoods
+    in
+        Http.send Foods request

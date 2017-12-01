@@ -74,7 +74,7 @@ create procedure user_pantry
 )
 begin
 SELECT 
-    (food_name)
+    *
 FROM
     foods f
 WHERE
@@ -137,3 +137,7 @@ CREATE TABLE meal_recipes (
         REFERENCES recipes (recipe_id),
     UNIQUE (meal_id , recipe_id)
 );
+
+select * from foods left join pantry_contents using (food_id) 
+where user_id = ''
+;
