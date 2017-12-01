@@ -3,3 +3,4 @@ api_keys
 node_modules/
 elm-stuff/
 dist/
+*.log
