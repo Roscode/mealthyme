@@ -6,7 +6,7 @@ import Http exposing (..)
 type alias Model =
     { username : Maybe String
     , userId : Maybe Int
-    , pantry : Maybe (List String)
+    , pantry : List ( String, Int )
     , foodinput : String
     , foodPairs : List ( String, Int )
     }
@@ -14,4 +14,4 @@ type alias Model =
 
 initialModel : Model
 initialModel =
-    Model Nothing Nothing Nothing "" []
+    Model Nothing Nothing [] "" []

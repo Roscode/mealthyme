@@ -45,7 +45,7 @@ renderHomepage model =
                 ]
 
 
-renderPantryResults : List String -> List ( String, Int ) -> Html Msg
+renderPantryResults : List ( String, Int ) -> List ( String, Int ) -> Html Msg
 renderPantryResults pantry foodPairs =
     div [ class "columns" ]
         [ div [ class "column is-half" ]
@@ -113,7 +113,9 @@ base model =
             renderHomepage model
 
 
-renderPantryItem : String -> Html Msg
-renderPantryItem item =
+renderPantryItem : ( String, Int ) -> Html Msg
+renderPantryItem ( name, id ) =
     li []
-        [ text item ]
+        [ text name
+        , button [ onClick (RemoveFood id) ] [ text "REMOVE" ]
+        ]
