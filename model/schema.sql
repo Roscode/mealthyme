@@ -26,12 +26,23 @@ delimiter ;
 
 CREATE TABLE users (
     user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(128) UNIQUE not null
+    username VARCHAR(128) UNIQUE NOT NULL,
+    password_hash CHAR(61) BINARY
 );
 
-insert into users (username) values ('roscode');
-
 delimiter //
+drop function if exists register //
+create function register (
+	uname varchar(128),
+    pword char(61) binary
+)
+returns int
+begin
+insert into users (username, password_hash) values (uname, pword);
+return LAST_INSERT_ID();
+end //
+
+
 drop function if exists login_signup //
 create function login_signup
 (
