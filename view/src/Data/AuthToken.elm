@@ -25,7 +25,7 @@ withAuthorization maybeToken builder =
     case maybeToken of
         Just (AuthToken token) ->
             builder
-                |> withHeader "authorization" ("Bearer " ++ token)
+                |> withHeader "X-JWT" ("Bearer: " ++ token)
 
         Nothing ->
             builder

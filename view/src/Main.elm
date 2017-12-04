@@ -170,32 +170,35 @@ setRoute maybeRoute model =
 
         errored =
             pageErrored model
+
+        ( newModel, cmd ) =
+            case maybeRoute of
+                Nothing ->
+                    { model | pageState = Loaded NotFound } => Cmd.none
+
+                Just Route.Home ->
+                    transition HomeLoaded (Home.init model.session)
+
+                Just Route.Login ->
+                    { model | pageState = Loaded (Login Login.initialModel) }
+                        => Cmd.none
+
+                Just Route.Logout ->
+                    let
+                        session =
+                            model.session
+                    in
+                    { model | session = { session | user = Nothing } }
+                        => Cmd.batch
+                            [ Ports.storeSession Nothing
+                            , Route.modifyUrl Route.Home
+                            ]
+
+                Just Route.Register ->
+                    { model | pageState = Loaded (Register Register.initialModel) }
+                        => Cmd.none
     in
-    case maybeRoute of
-        Nothing ->
-            { model | pageState = Loaded NotFound } => Cmd.none
-
-        Just Route.Home ->
-            transition HomeLoaded (Home.init model.session)
-
-        Just Route.Login ->
-            { model | pageState = Loaded (Login Login.initialModel) }
-                => Cmd.none
-
-        Just Route.Logout ->
-            let
-                session =
-                    model.session
-            in
-            { model | session = { session | user = Nothing } }
-                => Cmd.batch
-                    [ Ports.storeSession Nothing
-                    , Route.modifyUrl Route.Home
-                    ]
-
-        Just Route.Register ->
-            { model | pageState = Loaded (Register Register.initialModel) }
-                => Cmd.none
+    ( newModel, Cmd.batch [ cmd, Ports.setupNavBurger "hi" ] )
 
 
 pageErrored : Model -> ActivePage -> String -> ( Model, Cmd msg )
@@ -223,7 +226,8 @@ updatePage page msg model =
                 ( newModel, newCmd ) =
                     subUpdate subMsg subModel
             in
-            { model | pageState = Loaded (toModel newModel) } => Cmd.map toMsg newCmd
+            { model | pageState = Loaded (toModel newModel) }
+                => Cmd.map toMsg newCmd
 
         errored =
             pageErrored model
@@ -234,6 +238,9 @@ updatePage page msg model =
 
         ( HomeLoaded (Ok subModel), _ ) ->
             { model | pageState = Loaded (Home subModel) } => Cmd.none
+
+        ( HomeLoaded (Err error), _ ) ->
+            { model | pageState = Loaded (Errored error) } => Cmd.none
 
         ( SetUser user, _ ) ->
             let

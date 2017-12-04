@@ -20,11 +20,13 @@
                      #:database "mealthyme"
                      #:user "mealthyme")))))
 
+(define jwt-secret "ThisIsTheBestSecretEver")
+
 (define (get-jwt userid)
-  (jwt:encode/sign "HS256" "HaroldTheBallPlayer"
+  (jwt:encode/sign "HS256" jwt-secret
                    #:exp (+ (current-seconds) 172800)
                    #:iat (current-seconds)
-                   #:other (hasheq 'uid userid)))
+                   #:sub (number->string userid)))
 
 (define cors-header (header #"Access-Control-Allow-Origin" #"*"))
 (define json-header (header #"Content-Type" #"application/json; charset=utf-8"))
@@ -44,6 +46,11 @@
         (list cors-header json-header)
         (jsexpr->string (hash 'error msg))))
 
+(define unauthed
+  (list 401
+        (list cors-header)
+        ""))
+
 (define (register username password)
   (with-handlers ([exn:fail:sql? identity])
     (query-value db-conn
@@ -57,8 +64,8 @@
       (list 200
             (list
              cors-header
-             (header #"Access-Control-Allow-Methods" #"POST")
-             (header #"Access-Control-Allow-Headers" #"Content-Type")
+             (header #"Access-Control-Allow-Methods" #"POST, GET")
+             (header #"Access-Control-Allow-Headers" #"X-JWT, Content-Type")
              (header #"Access-Control-Allow-Credentials" #"true"))
             ""))))
 
@@ -105,13 +112,32 @@
                                  'token (get-jwt (vector-ref user-record 0)))))
              (bad-request (hasheq 'username "No such username password combination"))))))
 
-(get "/pantry"
+(define (get-token req)
+  (string-trim (cdr (assoc (string->symbol "x-jwt") (request-headers req)))
+               "Bearer: "))
+
+(define (token-user-id token)
+  (let ([verified (jwt:decode/verify token "HS256" jwt-secret)])
+    (if verified
+        (jwt:subject verified)
+        verified)))
+
+(define (get-pantry user-id)
+  (map (lambda (row)
+         (hasheq 'name (vector-ref row 0)
+                 'id (vector-ref row 1)))
+       (query-rows
+        db-conn
+        "select food_name, food_id from foods join pantry_contents using (food_id) where user_id = ?"
+        user-id)))
+
+(cors get "/pantry"
      (lambda (req)
-       (ok (hash 'items
-                 (query-list db-conn
-                             (string-append "call user_pantry("
-                                            (params req 'uid)
-                                            ")"))))))
+       (let* ([token (get-token req)]
+              [user-id (token-user-id token)])
+         (if user-id
+             (ok (hasheq 'pantry (get-pantry user-id)))
+             unauthed))))
 
 (get "/add"
      (lambda (req)
