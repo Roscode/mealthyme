@@ -6,8 +6,53 @@
         <title>Mealthyme</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
+        <style>
+            html, body {
+                height: 100%;
+            }
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+            .site {
+                flex: 1 0 auto;
+            }
+        </style>
     </head>
     <body id="page-body">
+        <div id="main" class="site"></div>
+        <footer class="footer">
+            <div class="container is-fluid">
+                <div class="content has-text-centered">
+                    <p>
+                        <strong>
+                            <a href="https://github.com/Roscode/mealthyme">
+                                Mealthyme
+                            </a>
+                        </strong>
+                        by
+                        <a href="https://github.com/Roscode">
+                            Darren Roscoe
+                        </a>
+                        and
+                        <a href="https://github.com/tremofox">
+                            Trevor Fox
+                        </a>
+                    </p>
+                    <p>
+                        Special Thanks to 
+                        <a href="https://github.com/rtfeldman">
+                            Richard Feldman
+                        </a>
+                        for his
+                        <a href="https://github.com/rtfeldman/elm-spa-example">
+                            Elm SPA example
+                        </a>
+                        which we used to lay the foundation for this frontend
+                    </p>
+                </div>
+            </div>
+        </footer>
         <script src="/app.js"></script>
     </body>
 </html>

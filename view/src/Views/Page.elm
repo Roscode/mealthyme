@@ -24,7 +24,6 @@ frame isLoading user page content =
     span []
         [ viewHeader page user isLoading
         , section [ class "section" ] [ content ]
-        , viewFooter
         ]
 
 
@@ -71,38 +70,6 @@ viewSignIn page user =
         Just user ->
             [ linkTo Route.Logout [ text "Sign out" ]
             ]
-
-
-viewFooter : Html msg
-viewFooter =
-    footer
-        [ class "footer" ]
-        [ div [ class "container is-fluid" ]
-            [ div [ class "content has-text-centered" ]
-                [ p []
-                    [ strong []
-                        [ a [ href "https://github.com/Roscode/mealthyme" ]
-                            [ text "Mealthyme" ]
-                        ]
-                    , text " by "
-                    , a [ href "https://github.com/Roscode" ]
-                        [ text "Darren Roscoe" ]
-                    , text " and "
-                    , a [ href "https://github.com/tremofox" ]
-                        [ text "Tevor Fox" ]
-                    ]
-                , p []
-                    [ text "Special Thanks to "
-                    , a [ href "https://github.com/rtfeldman" ]
-                        [ text "Richard Feldman" ]
-                    , text " for his "
-                    , a [ href "https://github.com/rtfeldman/elm-spa-example" ]
-                        [ text "Elm SPA example" ]
-                    , text " which we used to lay the foundation for this frontend"
-                    ]
-                ]
-            ]
-        ]
 
 
 navbarLink : ActivePage -> Route -> List (Html msg) -> Html msg

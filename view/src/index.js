@@ -6,7 +6,8 @@ require('./index.html');
 
 var Elm = require('./Main.elm');
 
-var app = Elm.Main.fullscreen(localStorage.session || null);
+var mountnode = document.getElementById("main");
+var app = Elm.Main.embed(mountnode, localStorage.session || null);
 
 app.ports.storeSession.subscribe(function(session) {
     localStorage.session = session;
@@ -18,8 +19,7 @@ window.addEventListener("storage", function(event) {
     }
 }, false)
 
-// dirty hack to toggle menu on mobile view
-app.ports.setupNavBurger.subscribe(function (val) {
+document.addEventListener('DOMContentLoaded', function () {
 
     // Get all "navbar-burger" elements
     var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
@@ -42,4 +42,5 @@ app.ports.setupNavBurger.subscribe(function (val) {
             });
         });
     }
+
 });
