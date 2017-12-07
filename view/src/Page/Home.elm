@@ -7,9 +7,10 @@ import Data.Pantry as Pantry exposing (Pantry)
 import Data.Session as Session exposing (Session)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (..)
 import Http
 import Page.Errored as Errored exposing (PageLoadError, pageLoadError)
+import Request.Food
 import Request.Pantry
 import Task exposing (Task)
 import Util exposing ((=>), onClickStopPropagation)
@@ -21,7 +22,8 @@ import Views.Page as Page
 
 
 type alias Model =
-    { foodResults : Pantry
+    { searchBar : String
+    , foodResults : Pantry
     , pantry : Pantry
     }
 
@@ -35,7 +37,7 @@ init session =
     in
     case maybeAuthToken of
         Nothing ->
-            Task.succeed (Model [] [])
+            Task.succeed (Model "" [] [])
 
         Just authToken ->
             let
@@ -46,7 +48,7 @@ init session =
                 handleLoadError err =
                     pageLoadError Page.Home (toString err)
             in
-            Task.map (Model []) loadPantry
+            Task.map (Model "" []) loadPantry
                 |> Task.mapError handleLoadError
 
 
@@ -66,6 +68,7 @@ view session model =
                 , div [ class "column is-half" ]
                     [ h3 [ class "title is-3" ] [ text "Food Search" ]
                     , foodSearchBar model
+                    , br [] []
                     , foodResultList model
                     ]
                 ]
@@ -73,20 +76,27 @@ view session model =
 
 foodSearchBar : Model -> Html Msg
 foodSearchBar model =
-    div [ class "control" ]
-        [ input
-            [ class "input"
-            , type_ "text"
-            , placeholder "Search for a food"
+    Html.form [ class "form", onSubmit SearchFood ]
+        [ div [ class "field has-addons" ]
+            [ div [ class "control" ]
+                [ input
+                    [ class "input"
+                    , type_ "text"
+                    , placeholder "Search for a food"
+                    , onInput SetSearchBar
+                    ]
+                    []
+                ]
+            , div [ class "control" ]
+                [ button [ class "button is-info", type_ "submit" ] [ text "Search" ] ]
             ]
-            []
         ]
 
 
 foodResultList : Model -> Html Msg
 foodResultList model =
     div [ class "field is-grouped is-grouped-multiline" ]
-        (List.map tagWithX model.foodResults)
+        (List.map tagWithCheck model.foodResults)
 
 
 viewPantry : Pantry -> Html Msg
@@ -105,12 +115,39 @@ tagWithX food =
         ]
 
 
+tagWithCheck : Food -> Html Msg
+tagWithCheck food =
+    div [ class "control" ]
+        [ div [ class "tags has-addons" ]
+            [ span [ class "tag" ] [ text food.name ]
+            , a [ class "tag is-success" ]
+                [ span [ class "icon" ]
+                    [ i [ class "fa fa-check" ] []
+                    ]
+                ]
+            ]
+        ]
+
+
 type Msg
-    = NoOp
+    = SetSearchBar String
+    | SearchFood
+    | FoodLoaded (Result Http.Error Pantry)
 
 
 update : Session -> Msg -> Model -> ( Model, Cmd Msg )
 update session msg model =
     case msg of
-        NoOp ->
-            ( model, Cmd.none )
+        SetSearchBar search ->
+            { model | searchBar = search } => Cmd.none
+
+        SearchFood ->
+            Request.Food.search model.searchBar
+                |> Http.send (Debug.log "yooo wtf m8" FoodLoaded)
+                |> (\cmd -> ( model, cmd ))
+
+        FoodLoaded (Err err) ->
+            model => Cmd.none
+
+        FoodLoaded (Ok pantry) ->
+            { model | foodResults = Debug.log "pantry" pantry } => Cmd.none

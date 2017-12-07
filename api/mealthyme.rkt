@@ -139,6 +139,20 @@
              (ok (hasheq 'pantry (get-pantry user-id)))
              unauthed))))
 
+(get "/foods"
+     (lambda (req)
+       (ok (hasheq 'foods
+                   (map
+                    (lambda (row)
+                      (hasheq 'name (vector-ref row 0)
+                              'id (vector-ref row 1)))
+                    (query-rows
+                     db-conn
+                     (string-append
+                      "select food_name, food_id from foods where food_name like '%"
+                      (params req 'q)
+                      "%' limit 15")))))))
+
 (get "/add"
      (lambda (req)
        (begin
@@ -151,20 +165,6 @@
                                (string-append "call user_pantry("
                                               (params req 'u)
                                               ")")))))))
-
-(get "/foods"
-     (lambda (req)
-       (ok (hash 'foods
-                 (make-hasheq
-                  (for/list
-                      ([row
-                        (in-list (query-rows
-                                  db-conn
-                                  (string-append
-                                   "select food_id, food_name from foods where food_name like '%"
-                                   (params req 'q)
-                                   "%' limit 15")))])
-                    (cons (string->symbol (vector-ref row 1)) (vector-ref row 0))))))))
 
 (post "/food"
       (lambda (req)
