@@ -41,28 +41,7 @@ begin
 insert into users (username, password_hash) values (uname, pword);
 return LAST_INSERT_ID();
 end //
-
-
-drop function if exists login_signup //
-create function login_signup
-(
-	uname varchar(128)
-)
-returns int
-begin
-insert ignore into users (username) values (uname);
-return (SELECT 
-    (user_id)
-FROM
-    users
-WHERE
-    username = uname);
-
-end //
-
 delimiter ;
-
-select * from users;
 
 CREATE TABLE pantry_contents (
 
@@ -75,32 +54,41 @@ CREATE TABLE pantry_contents (
     UNIQUE (user_id , food_id)
 );
 
-insert into pantry_contents values (1, 1);
+select * from users;
+
+insert into pantry_contents (user_id, food_id) values (1, 1);
+insert into pantry_contents (user_id, food_id) value (1, 2);
 
 delimiter //
-drop procedure if exists user_pantry //
-create procedure user_pantry
+drop procedure if exists add_to_pantry //
+create procedure add_to_pantry(
+	uid int,
+    fid int
+)
+begin
+	insert ignore into pantry_contents (user_id, food_id) value (uid, fid);
+end //
+delimiter ;
+
+delimiter //
+drop procedure if exists get_user_pantry //
+create procedure get_user_pantry
 (
 	uid int
 )
 begin
 SELECT 
-    (food_name)
+    food_name, food_id
 FROM
     foods f
+        JOIN
+    pantry_contents USING (food_id)
 WHERE
-    f.food_id IN (SELECT 
-            (food_id)
-        FROM
-            users
-                JOIN
-            pantry_contents USING (user_id)
-                JOIN
-            foods USING (food_id)
-        WHERE
-            user_id = uid);
+    user_id = uid;
 end //
 delimiter ;
+
+call get_user_pantry(1);
 
 select * from foods where food_name like '%egg%' limit 15;
 

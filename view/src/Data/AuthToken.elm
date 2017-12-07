@@ -20,12 +20,9 @@ decoder =
         |> Decode.map AuthToken
 
 
-withAuthorization : Maybe AuthToken -> RequestBuilder a -> RequestBuilder a
-withAuthorization maybeToken builder =
-    case maybeToken of
-        Just (AuthToken token) ->
+withAuthorization : AuthToken -> RequestBuilder a -> RequestBuilder a
+withAuthorization token builder =
+    case token of
+        AuthToken t ->
             builder
-                |> withHeader "X-JWT" ("Bearer: " ++ token)
-
-        Nothing ->
-            builder
+                |> withHeader "X-JWT" ("Bearer: " ++ t)

@@ -10,6 +10,7 @@
 (require (prefix-in jwt: net/jwt))
 (require (prefix-in bcrypt: bcrypt))
 
+;; Config
 
 (define db-conn
   (virtual-connection
@@ -21,6 +22,8 @@
                      #:user "mealthyme")))))
 
 (define jwt-secret "ThisIsTheBestSecretEver")
+
+;; Helpers
 
 (define (get-jwt userid)
   (jwt:encode/sign "HS256" jwt-secret
@@ -51,13 +54,6 @@
         (list cors-header)
         ""))
 
-(define (register username password)
-  (with-handlers ([exn:fail:sql? identity])
-    (query-value db-conn
-                 "select register(?, ?)"
-                 username
-                 (bcrypt:encode (string->bytes/utf-8 password)))))
-
 (define (cors-handler path)
   (define-handler "OPTIONS" path
     (lambda (req)
@@ -78,6 +74,40 @@
     [#f ""]
     [body (bytes->jsexpr body)]))
 
+(define (get-token req)
+  (string-trim (cdr (assoc (string->symbol "x-jwt") (request-headers req)))
+               "Bearer: "))
+
+(define (token-user-id token)
+  (let ([verified (jwt:decode/verify token "HS256" jwt-secret)])
+    (if verified
+        (jwt:subject verified)
+        verified)))
+
+;; Queries
+
+(define (get-user username)
+  (query-maybe-row db-conn "select user_id, username, password_hash from users where username = ?"
+             username))
+
+(define (register username password)
+  (with-handlers ([exn:fail:sql? identity])
+    (query-value db-conn
+                 "select register(?, ?)"
+                 username
+                 (bcrypt:encode (string->bytes/utf-8 password)))))
+
+(define (get-pantry user-id)
+  (map (lambda (row)
+         (hasheq 'name (vector-ref row 0)
+                 'id (string->number (vector-ref row 1))))
+       (query-rows
+        db-conn
+        (string-append
+         "call get_user_pantry(" user-id ")"))))
+
+;; Routes
+
 (cors post "/users"
       (lambda (req)
         (let* ([user (hash-ref (json-body req) 'user)]
@@ -95,10 +125,6 @@
                     (display (string=? "23000" (cdr (assoc 'code (exn:fail:sql-info user-id)))))
                     (server-error "idk"))]))))
 
-(define (get-user username)
-  (query-maybe-row db-conn "select user_id, username, password_hash from users where username = ?"
-             username))
-
 (cors post "/users/login"
      (lambda (req)
        (let* ([user (hash-ref (json-body req) 'user)]
@@ -112,25 +138,6 @@
                                  'token (get-jwt (vector-ref user-record 0)))))
              (bad-request (hasheq 'username "No such username password combination"))))))
 
-(define (get-token req)
-  (string-trim (cdr (assoc (string->symbol "x-jwt") (request-headers req)))
-               "Bearer: "))
-
-(define (token-user-id token)
-  (let ([verified (jwt:decode/verify token "HS256" jwt-secret)])
-    (if verified
-        (jwt:subject verified)
-        verified)))
-
-(define (get-pantry user-id)
-  (map (lambda (row)
-         (hasheq 'name (vector-ref row 0)
-                 'id (vector-ref row 1)))
-       (query-rows
-        db-conn
-        "select food_name, food_id from foods join pantry_contents using (food_id) where user_id = ?"
-        user-id)))
-
 (cors get "/pantry"
      (lambda (req)
        (let* ([token (get-token req)]
@@ -138,6 +145,22 @@
          (if user-id
              (ok (hasheq 'pantry (get-pantry user-id)))
              unauthed))))
+
+(cors post "/pantry"
+      (lambda (req)
+        (let* ([token (get-token req)]
+               [user-id (token-user-id token)])
+          (if user-id
+              (begin
+                (display (params req 'foodid))
+                (query-exec db-conn
+                                 (string-append
+                                  "call add_to_pantry("
+                                  user-id
+                                  ", "
+                                  (params req 'id)")"))
+                     (ok (hasheq 'pantry (get-pantry user-id))))
+              unauthed))))
 
 (get "/foods"
      (lambda (req)
@@ -152,25 +175,5 @@
                       "select food_name, food_id from foods where food_name like '%"
                       (params req 'q)
                       "%' limit 15")))))))
-
-(get "/add"
-     (lambda (req)
-       (begin
-         (query-exec db-conn
-                     "insert ignore into pantry_contents (user_id, food_id) values (?, ?)"
-                     (params req 'u)
-                     (params req 'f))
-         (ok (hash 'items
-                   (query-list db-conn
-                               (string-append "call user_pantry("
-                                              (params req 'u)
-                                              ")")))))))
-
-(post "/food"
-      (lambda (req)
-        (ok
-         (query-exec db-conn
-                     "insert into foods (food_name) values (?)"
-                     (params req 'food_name)))))
 
 (run)

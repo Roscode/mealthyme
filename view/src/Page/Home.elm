@@ -13,7 +13,7 @@ import Page.Errored as Errored exposing (PageLoadError, pageLoadError)
 import Request.Food
 import Request.Pantry
 import Task exposing (Task)
-import Util exposing ((=>), onClickStopPropagation)
+import Util exposing ((=>), pair)
 import Views.Form as Form
 import Views.Page as Page
 
@@ -42,7 +42,7 @@ init session =
         Just authToken ->
             let
                 loadPantry =
-                    Request.Pantry.get (Just authToken)
+                    Request.Pantry.get authToken
                         |> Http.toTask
 
                 handleLoadError err =
@@ -96,7 +96,21 @@ foodSearchBar model =
 foodResultList : Model -> Html Msg
 foodResultList model =
     div [ class "field is-grouped is-grouped-multiline" ]
-        (List.map tagWithCheck model.foodResults)
+        (List.map foodResultTag model.foodResults)
+
+
+foodResultTag : Food -> Html Msg
+foodResultTag food =
+    div [ class "control" ]
+        [ div [ class "tags has-addons is-medium" ]
+            [ span [ class "tag" ] [ text food.name ]
+            , a [ class "tag is-success", onClick (AddFood food.id) ]
+                [ span [ class "icon" ]
+                    [ i [ class "fa fa-check" ] []
+                    ]
+                ]
+            ]
+        ]
 
 
 viewPantry : Pantry -> Html Msg
@@ -108,23 +122,9 @@ viewPantry pantry =
 tagWithX : Food -> Html Msg
 tagWithX food =
     div [ class "control" ]
-        [ div [ class "tags has-addons" ]
+        [ div [ class "tags has-addons is-medium" ]
             [ span [ class "tag" ] [ text food.name ]
             , a [ class "tag is-delete" ] []
-            ]
-        ]
-
-
-tagWithCheck : Food -> Html Msg
-tagWithCheck food =
-    div [ class "control" ]
-        [ div [ class "tags has-addons" ]
-            [ span [ class "tag" ] [ text food.name ]
-            , a [ class "tag is-success" ]
-                [ span [ class "icon" ]
-                    [ i [ class "fa fa-check" ] []
-                    ]
-                ]
             ]
         ]
 
@@ -133,6 +133,8 @@ type Msg
     = SetSearchBar String
     | SearchFood
     | FoodLoaded (Result Http.Error Pantry)
+    | PantryLoaded (Result Http.Error Pantry)
+    | AddFood Int
 
 
 update : Session -> Msg -> Model -> ( Model, Cmd Msg )
@@ -143,11 +145,27 @@ update session msg model =
 
         SearchFood ->
             Request.Food.search model.searchBar
-                |> Http.send (Debug.log "yooo wtf m8" FoodLoaded)
-                |> (\cmd -> ( model, cmd ))
+                |> Http.send FoodLoaded
+                |> pair model
 
         FoodLoaded (Err err) ->
             model => Cmd.none
 
         FoodLoaded (Ok pantry) ->
-            { model | foodResults = Debug.log "pantry" pantry } => Cmd.none
+            { model | foodResults = pantry } => Cmd.none
+
+        AddFood foodId ->
+            case Maybe.map .token session.user of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just token ->
+                    Request.Pantry.addFood foodId token
+                        |> Http.send PantryLoaded
+                        |> pair model
+
+        PantryLoaded (Err err) ->
+            Debug.log (toString err) ( model, Cmd.none )
+
+        PantryLoaded (Ok pantry) ->
+            { model | pantry = pantry } => Cmd.none

@@ -1,4 +1,4 @@
-module Request.Pantry exposing (get)
+module Request.Pantry exposing (addFood, get)
 
 import Data.AuthToken as Authtoken exposing (AuthToken, withAuthorization)
 import Data.Pantry as Pantry exposing (Pantry)
@@ -12,10 +12,20 @@ import Request.Helpers exposing (apiUrl)
 import Util exposing ((=>))
 
 
-get : Maybe AuthToken -> Http.Request Pantry
-get maybeToken =
+get : AuthToken -> Http.Request Pantry
+get token =
     apiUrl "/pantry"
         |> HttpBuilder.get
         |> HttpBuilder.withExpect (Http.expectJson (Decode.field "pantry" Pantry.decoder))
-        |> withAuthorization maybeToken
+        |> withAuthorization token
+        |> HttpBuilder.toRequest
+
+
+addFood : Int -> AuthToken -> Http.Request Pantry
+addFood foodId token =
+    apiUrl "/pantry"
+        |> HttpBuilder.post
+        |> HttpBuilder.withExpect (Http.expectJson (Decode.field "pantry" Pantry.decoder))
+        |> withAuthorization token
+        |> HttpBuilder.withUrlEncodedBody [ ( "id", toString foodId ) ]
         |> HttpBuilder.toRequest
