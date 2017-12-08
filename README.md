@@ -39,18 +39,18 @@ Please (go to the repo) and see [schema.sql](https://github.com/Roscode/mealthym
 Our stack is the following:
 * MySql DBMS
 * A Racket REST(ish) API using the following libraries:
-** [dmac/spin](https://github.com/dmac/spin) for our rest API framework to speed up developement
-** racket base web-server/servlet, http, http/request-structs json
-** [net/jwt](https://pkgs.racket-lang.org/package/net-jwt) for jwt encoding/decoding
-** [bcrypt](https://pkgs.racket-lang.org/package/bcrypt) for password hashing
+  + [dmac/spin](https://github.com/dmac/spin) for our rest API framework to speed up developement
+  + racket base web-server/servlet, http, http/request-structs json
+  + [net/jwt](https://pkgs.racket-lang.org/package/net-jwt) for jwt encoding/decoding
+  + [bcrypt](https://pkgs.racket-lang.org/package/bcrypt) for password hashing
 * An Elm Web User interface using the following libraries
-** [NoRedInk/elm-decode-pipeline](http://package.elm-lang.org/packages/NoRedInk/elm-decode-pipeline/3.0.0/Json-Decode-Pipeline)
-** [elm-community/json-extra]()
-** [evancz/url-parser](http://package.elm-lang.org/packages/circuithub/elm-json-extra/latest/Json-Decode-Extra)
-** [lukewestby/elm-http-builder](http://package.elm-lang.org/packages/lukewestby/elm-http-builder/latest/HttpBuilder)
-** [lukewestby/elm-string-interpolation](http://package.elm-lang.org/packages/lukewestby/elm-string-interpolate/1.0.1/String-Interpolate)
-** [rtfeldman/elm-validate](http://package.elm-lang.org/packages/rtfeldman/elm-validate/1.1.3)
-** [rtfeldman/selectlist](http://package.elm-lang.org/packages/rtfeldman/selectlist/1.0.0)
+  + [NoRedInk/elm-decode-pipeline](http://package.elm-lang.org/packages/NoRedInk/elm-decode-pipeline/3.0.0/Json-Decode-Pipeline)
+  + [elm-community/json-extra]()
+  + [evancz/url-parser](http://package.elm-lang.org/packages/circuithub/elm-json-extra/latest/Json-Decode-Extra)
+  + [lukewestby/elm-http-builder](http://package.elm-lang.org/packages/lukewestby/elm-http-builder/latest/HttpBuilder)
+  + [lukewestby/elm-string-interpolation](http://package.elm-lang.org/packages/lukewestby/elm-string-interpolate/1.0.1/String-Interpolate)
+  + [rtfeldman/elm-validate](http://package.elm-lang.org/packages/rtfeldman/elm-validate/1.1.3)
+  + [rtfeldman/selectlist](http://package.elm-lang.org/packages/rtfeldman/selectlist/1.0.0)
 
 ### Data
 
