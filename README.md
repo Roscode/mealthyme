@@ -43,8 +43,8 @@ Our stack is the following:
   + [bcrypt](https://pkgs.racket-lang.org/package/bcrypt) for password hashing
 * An Elm Web User interface using the following libraries
   + [NoRedInk/elm-decode-pipeline](http://package.elm-lang.org/packages/NoRedInk/elm-decode-pipeline/3.0.0/Json-Decode-Pipeline)
-  + [elm-community/json-extra]()
-  + [evancz/url-parser](http://package.elm-lang.org/packages/circuithub/elm-json-extra/latest/Json-Decode-Extra)
+  + [elm-community/json-extra](http://package.elm-lang.org/packages/circuithub/elm-json-extra/latest/Json-Decode-Extra)
+  + [evancz/url-parser](https://github.com/evancz/url-parser)
   + [lukewestby/elm-http-builder](http://package.elm-lang.org/packages/lukewestby/elm-http-builder/latest/HttpBuilder)
   + [lukewestby/elm-string-interpolation](http://package.elm-lang.org/packages/lukewestby/elm-string-interpolate/1.0.1/String-Interpolate)
   + [rtfeldman/elm-validate](http://package.elm-lang.org/packages/rtfeldman/elm-validate/1.1.3)
