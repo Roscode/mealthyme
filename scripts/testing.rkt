@@ -1,6 +1,7 @@
 #lang racket
 
-(require db)
+(require db
+         json)
 
 (define db-conn
   (mysql-connect #:server "localhost"
@@ -8,9 +9,39 @@
                   #:database "mealthyme"
                   #:user "mealthyme"))
 
+(define (safe val)
+  (if (eq? val 'null)
+      0
+      val))
 
+(define (add-ingredients filename)
+  (let* ([full (call-with-input-file filename read-json)]
+       [matches (hash-ref full 'matches)])
+  (for ([m (in-list matches)])
+    (let ([ingredients (hash-ref m 'ingredients)]
+          [rid (hash-ref m 'id)])
+      (for ([i (in-list ingredients)])
+        (query-exec db-conn
+                  "call add_ingredient_to_recipe(?, ?)"
+                  rid
+                  i))))))
 
-(displayln (query-exec db-conn "call add_to_pantry(1, 5)"))
-(displayln (query-rows db-conn "call get_user_pantry(1)"))
-(displayln (query db-conn "delete from pantry_contents where user_id = 1 and food_id = 5"))
-(displayln (query-rows db-conn "call get_user_pantry(1)"))
+(define (add-recipes filename)
+  (let* ([full (call-with-input-file filename read-json)]
+       [matches (hash-ref full 'matches)])
+  (for ([m (in-list matches)])
+    (query-exec db-conn
+                "insert into recipes value (?, ?, ?, ?, ?)"
+                (hash-ref m 'id)
+                (hash-ref m 'recipeName)
+                (hash-ref m 'rating)
+                (hash-ref m 'sourceDisplayName)
+                (hash-ref (hash-ref full 'attribution) 'html)))))
+
+(define (add-all filename)
+  (add-recipes filename)
+  (add-ingredients filename))
+
+(add-all "panresponse")
+
+(disconnect db-conn)

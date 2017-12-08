@@ -1,0 +1,308 @@
+{
+  "criteria": {
+    "q": "egg",
+    "allowedIngredient": null,
+    "excludedIngredient": null
+  },
+  "matches": [
+    {
+      "imageUrlsBySize": {
+        "90": "https://lh3.googleusercontent.com/Udz3197HvbRLu1rNUAuJrHDPbPgTO7JJjwVuD1y3tT2muNiP2SqDKfORdaC_IoWOI7H3Iws7INrysUHgANrgSQ=s90-c"
+      },
+      "sourceDisplayName": "The Pioneer Woman",
+      "ingredients": [
+        "russet potatoes",
+        "salt",
+        "pepper",
+        "large eggs",
+        "nonstick spray"
+      ],
+      "id": "Eggs-in-hash-brown-nests-352693",
+      "smallImageUrls": [
+        "https://lh3.googleusercontent.com/WilYoHldNYB9LyXALuhggpNkH77SfIBxlxGqgV-ojDLFSplIJx219iLjngdUVT1Dz24iCxr2TmJ8pN9FKmP--g=s90"
+      ],
+      "recipeName": "Eggs in Hash Brown Nests",
+      "totalTimeInSeconds": 4800,
+      "attributes": {
+        "course": [
+          "Breakfast and Brunch"
+        ]
+      },
+      "flavors": null,
+      "rating": 5
+    },
+    {
+      "imageUrlsBySize": {
+        "90": "https://lh3.googleusercontent.com/Uwz3rv6W5lADR1JeMFpPqsnW07IBtvpQ0bvFdkI1ykod5j3jVGrG8P9Qit1GpTKcHR8XRT3jIR3aILuV4nipb64=s90-c"
+      },
+      "sourceDisplayName": "Skinnytaste",
+      "ingredients": [
+        "hard boiled eggs",
+        "light mayonnaise",
+        "dijon mustard",
+        "paprika",
+        "salt",
+        "pepper",
+        "chives"
+      ],
+      "id": "Deviled-Eggs-2268598",
+      "smallImageUrls": [
+        "https://lh3.googleusercontent.com/6CB0dakWQMiDoY413RlWSQhccQ5XZBkd4Y0A9oha5i5qQfnZsJC8qwQaVni5OyMRCDxCA9WxQnZoOGIm9anl=s90"
+      ],
+      "recipeName": "Deviled Eggs",
+      "totalTimeInSeconds": 1500,
+      "attributes": {
+        "course": [
+          "Appetizers",
+          "Lunch",
+          "Snacks"
+        ]
+      },
+      "flavors": {
+        "bitter": 0.8333333333333334,
+        "meaty": 0.8333333333333334,
+        "piquant": 0.6666666666666666,
+        "salty": 0.8333333333333334,
+        "sour": 0.3333333333333333,
+        "sweet": 0.16666666666666666
+      },
+      "rating": 4
+    },
+    {
+      "imageUrlsBySize": {
+        "90": "http://lh3.googleusercontent.com/aIZ_4p3YEW96fNPVbtXZRc9KzJ0RPop58Ntxu553XGNyJ1k0hECuS4NYds1fo7F46RojUnoG1zs8wk08JmdC8Q=s90-c"
+      },
+      "sourceDisplayName": "popsugar.com",
+      "ingredients": [
+        "eggs",
+        "grated parmesan cheese",
+        "salt",
+        "ground black pepper"
+      ],
+      "id": "Egg-Clouds-1101213",
+      "smallImageUrls": [
+        "http://lh3.googleusercontent.com/ibSa6TuMVitimK2XJ7_bCXPqXdeBStAeQOXXED4hpE0sIpJjkn8OohPCtt3F9Hjq6iHdzacV9PajIOTuMLssig=s90"
+      ],
+      "recipeName": "Egg Clouds",
+      "totalTimeInSeconds": 1800,
+      "attributes": {
+        "course": [
+          "Breakfast and Brunch"
+        ]
+      },
+      "flavors": null,
+      "rating": 3
+    },
+    {
+      "imageUrlsBySize": {
+        "90": "https://lh3.googleusercontent.com/qmB9rq83CD_Z-aZD9WwmP8Qr2rrE-WrE1rFRjSqOi-5RS7Qk8HdHksyCAGBsSRz8prAWhADD_zkNVvF-HCGylQ=s90-c"
+      },
+      "sourceDisplayName": "Kitchen Tested",
+      "ingredients": [
+        "eggs",
+        "green onions",
+        "parmesan cheese",
+        "bacon slices",
+        "chili pepper",
+        "pepper"
+      ],
+      "id": "Eggs-in-Chili-Clouds-2058813",
+      "smallImageUrls": [
+        "https://lh3.googleusercontent.com/m8K_vzyGF3_bXK4Rr_R_ABc0KuQqT0uUps5Ntcnz4PweJxpInLfdfoXCXpDISJVwVaMqyIZNGRjMSEZtzGEa-g=s90"
+      ],
+      "recipeName": "Eggs in Chili Clouds",
+      "totalTimeInSeconds": 1500,
+      "attributes": {
+        "course": [
+          "Breakfast and Brunch"
+        ]
+      },
+      "flavors": {
+        "bitter": 0.8333333333333334,
+        "meaty": 0.8333333333333334,
+        "piquant": 0.5,
+        "salty": 0.8333333333333334,
+        "sour": 0.16666666666666666,
+        "sweet": 0.16666666666666666
+      },
+      "rating": 4
+    },
+    {
+      "imageUrlsBySize": {
+        "90": "https://lh3.googleusercontent.com/DLXlBkBIVefm8vbHHQiAxxetL3wAOQJdq9fbvyWj6AZEYxEU1sRts-jJQwICKRVbYEqsRF1Fpu3OSI0bxx8xsUg=s90-c"
+      },
+      "sourceDisplayName": "Tori Avey",
+      "ingredients": [
+        "eggs",
+        "whole milk",
+        "crumbled cheese",
+        "salt",
+        "pepper",
+        "cooking oil",
+        "olive oil"
+      ],
+      "id": "How-to-Make-Fluffy-Moist-Scrambled-Eggs-2239297",
+      "smallImageUrls": [
+        "https://lh3.googleusercontent.com/3tb1nZiuoN2y2Py8arGSCTCV_wcRL6vy9BeE5siDf3pmJ9YEWLkkAHNzCJqO1JrX2NAjvypRlX32TDBDwl2R3Q=s90"
+      ],
+      "recipeName": "How to Make Fluffy Moist Scrambled Eggs",
+      "totalTimeInSeconds": 480,
+      "attributes": {
+        "course": [
+          "Breakfast and Brunch"
+        ]
+      },
+      "flavors": null,
+      "rating": 4
+    },
+    {
+      "imageUrlsBySize": {
+        "90": "http://lh3.googleusercontent.com/2XO0QQnh-PoEPrEEMk0u-Jpb-frR-rih9GwY4BNkvdOZQ-1eZCcaQE4bImIZLbylK8Wkn9bZ_iFBMQI1BetgT2I=s90-c"
+      },
+      "sourceDisplayName": "Byron Talbott",
+      "ingredients": [
+        "fresh breadcrumbs",
+        "rosemary",
+        "thyme",
+        "parsley",
+        "eggs",
+        "canola oil"
+      ],
+      "id": "Crispy-Eggs-1281674",
+      "smallImageUrls": [
+        "http://lh3.googleusercontent.com/VmavLfdTnFZI2YsNBlLwvNp8K6C28_f0mhhG8vGKV1dJRyoyHV8iNbzLaeWUHHHocNofAyQp-8uu6irz-YdUVQ=s90"
+      ],
+      "recipeName": "Crispy Eggs",
+      "totalTimeInSeconds": 2700,
+      "attributes": {
+        "course": [
+          "Breakfast and Brunch"
+        ]
+      },
+      "flavors": null,
+      "rating": 4
+    },
+    {
+      "imageUrlsBySize": {
+        "90": "https://lh3.googleusercontent.com/CLax2EFmtg0NDreiUZyCXD9lZq6gBt01w6qcuf4SDXeT1EwAwMv2ELqGWueXvrVnhtXJ05cv_Kwtf9Xc_imu=s90-c"
+      },
+      "sourceDisplayName": "Macheesmo",
+      "ingredients": [
+        "eggs",
+        "cream of tartar",
+        "olive oil",
+        "kosher salt",
+        "fresh chives",
+        "hot sauce"
+      ],
+      "id": "Pillow-Eggs-1379190",
+      "smallImageUrls": [
+        "https://lh3.googleusercontent.com/JxUBWtV0UjR7WCgTIqQqtTdujKOMsbz5JqEUNKGj9ayEqJ0YEi49YNddOB5LTZq8vnhI-T69VlMxA_jJOn0=s90"
+      ],
+      "recipeName": "Pillow Eggs",
+      "totalTimeInSeconds": 1800,
+      "attributes": {
+        "course": [
+          "Breakfast and Brunch"
+        ]
+      },
+      "flavors": {
+        "bitter": 0.6666666666666666,
+        "meaty": 0.6666666666666666,
+        "piquant": 0.8333333333333334,
+        "salty": 0.8333333333333334,
+        "sour": 0.5,
+        "sweet": 0.16666666666666666
+      },
+      "rating": 4
+    },
+    {
+      "imageUrlsBySize": {
+        "90": "https://lh3.googleusercontent.com/UHSAvmtnz78cOMHMxeoqLSpMps_mRkEL-Y8mSk9Ui0iJRWIX02jRbsP3tTImSUJblDbG0yRMeyWMYyTft3b4WNw=s90-c"
+      },
+      "sourceDisplayName": "Laughing Spatula",
+      "ingredients": [
+        "hash brown",
+        "eggs"
+      ],
+      "id": "Egg-Baskets-2272434",
+      "smallImageUrls": [
+        "https://lh3.googleusercontent.com/c1W_0BAEagT519OD_8rKy_AIrwSoagOnGotpaE8O-zjT51jA-VLMDA4Be4QEcIoIP9HAZxXc-N2uQcddkABZ=s90"
+      ],
+      "recipeName": "Egg Baskets",
+      "totalTimeInSeconds": 2400,
+      "attributes": {
+        "course": [
+          "Breakfast and Brunch"
+        ]
+      },
+      "flavors": null,
+      "rating": 4
+    },
+    {
+      "imageUrlsBySize": {
+        "90": "https://lh3.googleusercontent.com/YX_AIhIf8IZDHsbBSZSWytny5xS1iHpzM3JkY3-tCNVtgOb3TSLFrGp_X26jz59OLoShKPTmFkfiqmsaN90by0U=s90-c"
+      },
+      "sourceDisplayName": "I Breathe... I'm Hungry...",
+      "ingredients": [
+        "eggs",
+        "cream cheese",
+        "cinnamon",
+        "sugar substitute",
+        "butter"
+      ],
+      "id": "Keto-Egg-Fast-Snickerdoodle-Crepes-2192636",
+      "smallImageUrls": [
+        "https://lh3.googleusercontent.com/q6H2yDrtOX6bvKz_Es1-rkNMzhCwKnMuHJ2BW52H141hFrVVl70dXgA10Ib1w6yoNLotgB2ZHQVE4csBX8omuA=s90"
+      ],
+      "recipeName": "Keto Egg Fast Snickerdoodle Crepes",
+      "totalTimeInSeconds": 1500,
+      "attributes": {
+        "course": [
+          "Breakfast and Brunch",
+          "Desserts"
+        ]
+      },
+      "flavors": null,
+      "rating": 4
+    },
+    {
+      "imageUrlsBySize": {
+        "90": "https://lh3.googleusercontent.com/UlOEImNl6Q0GUJjeGZrwvY0a2r_48ALBvJp-NuE9KZZdQ1IzWeqNuvobF4E1EEnr1NAetLsXxlUqwngLPaSiJJs=s90-c"
+      },
+      "sourceDisplayName": "Herbie Likes Spaghetti",
+      "ingredients": [
+        "large eggs",
+        "baby spinach",
+        "baguette",
+        "dijon mustard",
+        "oregano",
+        "thyme"
+      ],
+      "id": "Eggs-1765126",
+      "smallImageUrls": [
+        "https://lh3.googleusercontent.com/e5fCLPEiIksJZdONwAg3NKEQ-229eLn6c_-AhZribpALpL7iAIvpVJZ_D7d3ZfBkC7QB44iGPgZNzDQ0fLUvUA=s90"
+      ],
+      "recipeName": "Eggs",
+      "totalTimeInSeconds": null,
+      "attributes": {},
+      "flavors": {
+        "bitter": 0.8333333333333334,
+        "meaty": 0.16666666666666666,
+        "piquant": 0.16666666666666666,
+        "salty": 0.16666666666666666,
+        "sour": 0.8333333333333334,
+        "sweet": 0.16666666666666666
+      },
+      "rating": 4
+    }
+  ],
+  "facetCounts": {},
+  "totalMatchCount": 570140,
+  "attribution": {
+    "html": "Recipe search powered by <a href='http://www.yummly.co/recipes'><img alt='Yummly' src='https://static.yummly.co/api-logo.png'/></a>",
+    "url": "http://www.yummly.co/recipes/",
+    "text": "Recipe search powered by Yummly",
+    "logo": "https://static.yummly.co/api-logo.png"
+  }
+}
