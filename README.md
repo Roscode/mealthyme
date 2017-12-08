@@ -37,7 +37,7 @@ Please (go to the repo) and see [schema.sql](https://github.com/Roscode/mealthym
 Our stack is the following:
 * MySql DBMS
 * A Racket REST(ish) API using the following libraries:
-  + racket base web-server/servlet, http, http/request-structs json
+  + racket base web-server/servlet, http, http/request-structs, and json
   + [dmac/spin](https://github.com/dmac/spin) for our rest API framework to speed up developement
   + [net/jwt](https://pkgs.racket-lang.org/package/net-jwt) for jwt encoding/decoding
   + [bcrypt](https://pkgs.racket-lang.org/package/bcrypt) for password hashing
@@ -48,7 +48,6 @@ Our stack is the following:
   + [lukewestby/elm-http-builder](http://package.elm-lang.org/packages/lukewestby/elm-http-builder/latest/HttpBuilder)
   + [lukewestby/elm-string-interpolation](http://package.elm-lang.org/packages/lukewestby/elm-string-interpolate/1.0.1/String-Interpolate)
   + [rtfeldman/elm-validate](http://package.elm-lang.org/packages/rtfeldman/elm-validate/1.1.3)
-  + [rtfeldman/selectlist](http://package.elm-lang.org/packages/rtfeldman/selectlist/1.0.0)
 
 ### Data
 
@@ -57,6 +56,8 @@ The nature of our application is such that it requires quite a bit of data to be
 When we first found the yummly API we were minorly disheartened since the yummly app seems like a much better version of our goal for this project, but we realized that in our app we also represent meals as combinations of recipes and that once we are able to implement keeping track of amounts, we will be able optimize on those meals in a way that yummly does not do.
 
 ### User Flow
+
+TODO -- Do this
 
 ### Lessons Learned
 Over the course of this project we learned a lot. Mostly through failure, which as everyone knows is the best way to learn! Here are some of the things we learned
