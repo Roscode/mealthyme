@@ -29,7 +29,7 @@ Also we have had some compatibility issues with Windows, so if you don't own a u
 
 ### Model
 
-Please (go to the repo) and see [schema.sql](https://github.com/Roscode/mealthyme/blob/master/model/schema.sql) and [er_diagram.pdf](https://github.com/Roscode/mealthyme/blob/master/model/er_diagram.pdf) for database structure. Currently the schema is missing some fields (such as an amount column in pantry_contents to take that into account when planning meals and shopping) on purpose because of their complexity, once we have finished building the skeleton of the application and represented the schema so far we will begin adding those extra details and features.
+Please (go to the repo) and see [schema.sql](https://github.com/Roscode/mealthyme/blob/master/model/schema.sql) and [er_diagram.pdf](https://github.com/Roscode/mealthyme/blob/master/model/er_diagram.pdf) for database structure.
 
 
 ### Technical Specification
