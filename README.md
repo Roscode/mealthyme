@@ -39,8 +39,8 @@ Please (go to the repo) and see [schema.sql](https://github.com/Roscode/mealthym
 Our stack is the following:
 * MySql DBMS
 * A Racket REST(ish) API using the following libraries:
-  + [dmac/spin](https://github.com/dmac/spin) for our rest API framework to speed up developement
   + racket base web-server/servlet, http, http/request-structs json
+  + [dmac/spin](https://github.com/dmac/spin) for our rest API framework to speed up developement
   + [net/jwt](https://pkgs.racket-lang.org/package/net-jwt) for jwt encoding/decoding
   + [bcrypt](https://pkgs.racket-lang.org/package/bcrypt) for password hashing
 * An Elm Web User interface using the following libraries
