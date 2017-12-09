@@ -78,17 +78,25 @@
   (string-trim (cdr (assoc (string->symbol "x-jwt") (request-headers req)))
                "Bearer: "))
 
+(define (empty-string? s)
+  (zero? (string-length s)))
+
 (define (token-user-id token)
   (let ([verified (jwt:decode/verify token "HS256" jwt-secret)])
     (if verified
         (jwt:subject verified)
         verified)))
 
-;; Queries
+;;;;;; Entities
+
+;;; User
+
+; queries
 
 (define (get-user username)
-  (query-maybe-row db-conn "select user_id, username, password_hash from users where username = ?"
-             username))
+  (query-maybe-row db-conn
+                   "select user_id, username, password_hash from users where username = ?"
+                   username))
 
 (define (register username password)
   (with-handlers ([exn:fail:sql? identity])
@@ -97,16 +105,7 @@
                  username
                  (bcrypt:encode (string->bytes/utf-8 password)))))
 
-(define (get-pantry user-id)
-  (map (lambda (row)
-         (hasheq 'name (vector-ref row 0)
-                 'id (string->number (vector-ref row 1))))
-       (query-rows
-        db-conn
-        (string-append
-         "call get_user_pantry(" user-id ")"))))
-
-;; Routes
+; routes
 
 (cors post "/users"
       (lambda (req)
@@ -138,6 +137,82 @@
                                  'token (get-jwt (vector-ref user-record 0)))))
              (bad-request (hasheq 'username "No such username password combination"))))))
 
+;;; Food
+
+; queries
+
+(define (search-food pattern offset count)
+  (query-rows db-conn
+              "select food_id, food_name from foods where food_name like ? order by length(food_name) limit ?, ?"
+              pattern offset count))
+
+(define (get-food-by-name name)
+  (query-maybe-row db-conn "select * from foods where food_name = ?"
+                   name))
+
+(define (create-food name img-path)
+  (query-exec db-conn
+              "insert into foods (food_name, img_path) value(?, ?)"
+              name img-path))
+
+(define (delete-food id)
+  (query-exec db-conn
+              "delete from foods where food_id = ?" id))
+
+; routes
+
+(cors get "/foods"
+      (lambda (req)
+        (let* ([pattern (string-append "%" (params req 'q) "%")]
+               [offset (params req 'offset)]
+               [count (params req 'count)]
+               [response (search-food pattern
+                                      (if (empty-string? offset) 0 offset)
+                                      (if (empty-string? count) 20 count))]
+               [encoder (lambda (row)
+                          (hasheq 'food_id (vector-ref row 0)
+                                  'food_name (vector-ref row 1)))])
+          (ok (hasheq 'foods
+                      (map encoder response))))))
+
+(cors post "/foods"
+      (lambda (req)
+        (begin
+          (create-food (params req 'food_name) (params req 'img_path))
+          (ok ""))))
+
+(cors delete "/food/:foodid"
+      (lambda (req)
+        (begin
+          (delete-food (params req 'foodid))
+          (ok ""))))
+
+;; Pantry
+
+; queries
+
+(define (get-pantry user-id)
+  (map (lambda (row)
+         (hasheq 'name (vector-ref row 0)
+                 'id (string->number (vector-ref row 1))))
+       (query-rows
+        db-conn
+        (string-append
+         "call get_user_pantry(" user-id ")"))))
+
+(define (add-to-pantry user-id food-id)
+  (query-exec db-conn
+              (string-append
+               "call add_to_pantry(" user-id ", " food-id ")")))
+
+(define (delete-from-pantry user-id food-id)
+  (query-exec db-conn
+              "delete ignore from pantry_contents where user_id = ? and food_id = ?"
+              user-id
+              food-id))
+
+;routes
+
 (cors get "/pantry"
      (lambda (req)
        (let* ([token (get-token req)]
@@ -152,28 +227,22 @@
                [user-id (token-user-id token)])
           (if user-id
               (begin
-                (display (params req 'foodid))
-                (query-exec db-conn
-                                 (string-append
-                                  "call add_to_pantry("
-                                  user-id
-                                  ", "
-                                  (params req 'id)")"))
-                     (ok (hasheq 'pantry (get-pantry user-id))))
+                (add-to-pantry user-id (params req 'id))
+                (ok (hasheq 'pantry (get-pantry user-id))))
               unauthed))))
 
-(get "/foods"
-     (lambda (req)
-       (ok (hasheq 'foods
-                   (map
-                    (lambda (row)
-                      (hasheq 'name (vector-ref row 0)
-                              'id (vector-ref row 1)))
-                    (query-rows
-                     db-conn
-                     (string-append
-                      "select food_name, food_id from foods where food_name like '%"
-                      (params req 'q)
-                      "%' limit 15")))))))
+(cors delete "/pantry/:foodid"
+      (lambda (req)
+        (let* ([token (get-token req)]
+               [user-id (token-user-id token)])
+          (if user-id
+              (begin
+                (delete-from-pantry
+                            user-id
+                            (params req 'foodid))
+                (ok (hasheq 'pantry (get-pantry user-id))))
+              unauthed))))
+
+;;;; Run
 
 (run)

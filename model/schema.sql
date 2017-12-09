@@ -12,11 +12,10 @@ use mealthyme;
 -- drop table if exists users;
 -- drop table if exists foods;
 
-
 -- ordered table creates
 CREATE TABLE foods (
     food_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    food_name VARCHAR(128) NOT NULL,
+    food_name VARCHAR(128) UNIQUE NOT NULL,
     img_path VARCHAR(128)
 );
 
@@ -50,8 +49,6 @@ CREATE TABLE shopping_list_contents (
     UNIQUE (user_id , food_id)
 );
 
-
-drop table recipes;
 CREATE TABLE recipes (
     recipe_id VARCHAR(128) NOT NULL PRIMARY KEY,
     recipe_name VARCHAR(128) NOT NULL,
@@ -137,9 +134,20 @@ create procedure add_meal_to_shopping_list(
 )
 begin
 insert ignore into shopping_list_contents
-select distinct uid, food_id
-from meal_recipes join recipe_ingredients using (recipe_id)
-	where meal_id = mealid and food_id not in (select food_id from pantry_contents where user_id = uid);
+SELECT DISTINCT
+    uid, food_id
+FROM
+    meal_recipes
+        JOIN
+    recipe_ingredients USING (recipe_id)
+WHERE
+    meal_id = mealid
+        AND food_id NOT IN (SELECT 
+            food_id
+        FROM
+            pantry_contents
+        WHERE
+            user_id = uid);
 end //
 
 
@@ -147,7 +155,10 @@ end //
 drop procedure if exists get_all_food //
 create procedure get_all_food()
 begin
-select food_name from foods;
+SELECT 
+    food_name
+FROM
+    foods;
 end //
 
 
