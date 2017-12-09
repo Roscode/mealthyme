@@ -13,5 +13,5 @@ type alias Food =
 decoder : Decoder Food
 decoder =
     decode Food
-        |> required "name" Decode.string
-        |> required "id" Decode.int
+        |> required "food_name" Decode.string
+        |> required "food_id" Decode.int

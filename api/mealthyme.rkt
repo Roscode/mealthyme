@@ -193,8 +193,8 @@
 
 (define (get-pantry user-id)
   (map (lambda (row)
-         (hasheq 'name (vector-ref row 0)
-                 'id (string->number (vector-ref row 1))))
+         (hasheq 'food_name (vector-ref row 0)
+                 'food_id (string->number (vector-ref row 1))))
        (query-rows
         db-conn
         (string-append
