@@ -1,5 +1,7 @@
 # mealthyme
 
+[See the repo](https://github.com/Roscode/mealthyme)
+
 ## Final Report
 
 ### Group members
@@ -25,12 +27,20 @@ Also we have had some compatibility issues with Windows, so if you don't own a u
 
 #### Installing dependencies
 
-`cd` into the views folder and run `npm install` then `npm start`
+Open MySql workbench and create a new schema using `model/dump.sql`
 
-### Model
+Once Racket (and the bundled raco tool) is installed run:
+`raco pkg install spin`
+`raco pkg install bcrypt`
+`raco pkg install net-jwt`
 
-Please (go to the repo) and see [schema.sql](https://github.com/Roscode/mealthyme/blob/master/model/schema.sql) and [er_diagram.pdf](https://github.com/Roscode/mealthyme/blob/master/model/er_diagram.pdf) for database structure.
+Open `api/mealthyme.rkt` in drracket and hit run
 
+`cd` into the views folder and run `elm-package install`, `npm install` then `npm start`
+
+Go to `localhost:3000` in your browser and see the magic!
+
+See the future work section for ways we plan to improve this build process
 
 ### Technical Specification
 
@@ -38,7 +48,7 @@ Our stack is the following:
 * MySql DBMS
 * A Racket REST(ish) API using the following libraries:
   + racket base web-server/servlet, http, http/request-structs, and json
-  + [dmac/spin](https://github.com/dmac/spin) for our rest API framework to speed up developement
+  + [dmac/spin](https://github.com/dmac/spin) for our rest API framework to speed up development
   + [net/jwt](https://pkgs.racket-lang.org/package/net-jwt) for jwt encoding/decoding
   + [bcrypt](https://pkgs.racket-lang.org/package/bcrypt) for password hashing
 * An Elm Web User interface using the following libraries
@@ -51,19 +61,34 @@ Our stack is the following:
 
 ### Data
 
-The nature of our application is such that it requires quite a bit of data to be very useful, and having the user input all of the recipe data defeats the point of having an application at all. So we went looking for a suitable API to get access to some of that valuable data, and found [The Yummly Recipe API](https://developer.yummly.com/). We have an api key and are already beginning to use it's metadata dictionaries to fill our foods table. We will also use the API to power the recipe search functionality in our application.
-
-When we first found the yummly API we were minorly disheartened since the yummly app seems like a much better version of our goal for this project, but we realized that in our app we also represent meals as combinations of recipes and that once we are able to implement keeping track of amounts, we will be able optimize on those meals in a way that yummly does not do.
+We have been manually gathering our data from [The Yummly Recipe API](https://developer.yummly.com/) for now, and will be using it as a live source of data once our Elm frontend is more polished.
 
 ### User Flow
 
-TODO -- Do this
+Currently the user flow of our frontend is restricted to the following actions.
+
+## Register
+The user navigates to the sign up page, enters a username and password and submits the form, an account is created and they are redirected to the homepage along with an token for future authentication.
+
+## Login
+the user navigates to the login page, enters the same username and password as when they signed up, and they are redirected to the homepage along with a token for authentication.
+
+## Edit Pantry
+From the homepage the user is able to edit the contents of their pantry, this involves either searching for a food and adding one from the list of results by clicking the check mark, or deleting an item from the user's pantry by clicking the corresponding 'X'.
+
+The following actions are available at the database (or api) level but haven't been fully implemented through the frontend yet.
+
+## Create a meal
+Through an insert into the meals table and a sequence of add_recipe_to_meal procedure calls you can create meals consisting of recipes
+
+## Plan a Meal
+The add_meal_to_shopping_list procedure represents planning a meal by adding all ingredients used in the meal and not present in the user's pantry to the user's shopping list.
 
 ### Lessons Learned
 Over the course of this project we learned a lot. Mostly through failure, which as everyone knows is the best way to learn! Here are some of the things we learned
-1. Elm! Elm is a language Darren has been eyeballing all semester, but didn't have the time or opportunity to try it out until this project. After a few weeks of using it succesfully we are very pleased with what we've found. In particular the compiler error messages are some of the best we've seen and super helpful in finding bugs before they run. Also it compiles to javascript so it is easy to build and manage dependencies using the elm-package and npm package distribution systems.
+1. Elm! Elm is a language Darren has been eyeballing all semester, but didn't have the time or opportunity to try it out until this project. After a few weeks of using it successfully we are very pleased with what we've found. In particular the compiler error messages are some of the best we've seen and super helpful in finding bugs before they run. Also it compiles to javascript so it is easy to build and manage dependencies using the elm-package and npm package distribution systems.
 2. Trevor learned git! We used git to manage our source code.
-3. We both learned the difficulties of distributed workflows. We had a lot of trouble initially being able to work on the project simultaneously since any work being done that early would heavily depend on everything else so multiple separate changes could quickly break the app. Because of this we did a lot of partner programming, and then soon after getting to a point where distributing work made sense, we began having compatibility issues with windows, namely because of a dependency on gcc deep in one of our racket packages.
+3. We both learned the difficulties of distributed work flows. We had a lot of trouble initially being able to work on the project simultaneously since any work being done that early would heavily depend on everything else so multiple separate changes could quickly break the app. Because of this we did a lot of partner programming, and then soon after getting to a point where distributing work made sense, we began having compatibility issues with windows, namely because of a dependency on gcc deep in one of our racket packages.
 4. Currently our frontend is pretty lacking in features as we decided to completely overhaul it after our presentation (it was very hacky before then). We did this because this is something that interests us and we intend to work more on it after the semester ends, so we wanted to start from a more solid base rather than continue to throw features on top of a plate of spaghetti (code) only to later realize we forgot the meatballs (passwords, proper routing, etc.).
 
 ### Future Work
@@ -71,8 +96,9 @@ Over the course of this project we learned a lot. Mostly through failure, which 
 This project was very challenging, we set high goals, and frankly there is a lot left to do. This was intentional, and we will be doing more with the project after finals. Among the many improvements we plan to make are the following:
 1. Finish the Elm UI. Now that we have a solid base and a better grasp of Elm practices and patterns this will get easier and easier.
 2. Add calendar support. We decided early on not to worry about dates yet (i.e. expiring food and planning a meal for a specific day) and instead to simply have meals and the ability to add the required (and not already owned) ingredients to the shopping list, but it will become necessary if we want to be able to offer meal plan optimizations (along the lines of offering strings of meals which encourage ingredient reuse).
-3. Add support for amounts. Another challenge we outsourced to our future selves is dealing with amounts of foods. This may sounds simple (and did to us at first) until you realize that in order to be useful the representation of food amounts must be able to convert between amounts bought (i.e. 1 lb of flour) and amounts used (i.e. 1 cup of flour), a problem we temble in fear before (currently, I'm sure our future selves with handle it just fine).
-4. In order not to waste API requests before having a full frontend (we have a fixed allowance for life unless we want pay for it) we have not included calling the Yummly API in the app itself and instead have been using curl to get data to fill our database, but once the we have something we feel is deployable, we will add back in the API calls.
+3. Add support for amounts. Another challenge we outsourced to our future selves is dealing with amounts of foods. This may sounds simple (and did to us at first) until you realize that in order to be useful the representation of food amounts must be able to convert between amounts bought (i.e. 1 lb of flour) and amounts used (i.e. 1 cup of flour), a problem we tremble in fear before (currently, I'm sure our future selves with handle it just fine).
+4. Improve/automate build process. Currently our build process is almost entirely manual. The Elm code is managed by npm but the racket dependencies have to be manually installed, which is a pain, so one of our next steps is to figure out the best dependency management practice for racket.
+5. In order not to waste API requests before having a full frontend (we have a fixed allowance for life unless we want pay for it) we have not included calling the Yummly API in the app itself and instead have been using curl to get data to fill our database, but once the we have something we feel is deployable, we will add back in the API calls.
 
 ### Group Member Contribution
 
