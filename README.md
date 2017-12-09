@@ -21,7 +21,7 @@ This projects aims to provide a single user with a relatively automated way to p
 
 #### Software requirements
 
-You will need to install [node and npm](https://nodejs.org/en/), [elm](https://guide.elm-lang.org/install.html), and [drracket](https://download.racket-lang.org/) (and mysql if you haven't already).
+You will need to install [node and npm](https://nodejs.org/en/), [elm](https://guide.elm-lang.org/install.html), and [drracket](https://download.racket-lang.org/) (and mysql if you haven't already). You can use `model/dump.sql` to create the schema and tuples.
 
 Also we have had some compatibility issues with Windows, so if you don't own a unix machine go buy one (or install linux).
 
@@ -58,6 +58,10 @@ Our stack is the following:
   + [lukewestby/elm-http-builder](http://package.elm-lang.org/packages/lukewestby/elm-http-builder/latest/HttpBuilder)
   + [lukewestby/elm-string-interpolation](http://package.elm-lang.org/packages/lukewestby/elm-string-interpolate/1.0.1/String-Interpolate)
   + [rtfeldman/elm-validate](http://package.elm-lang.org/packages/rtfeldman/elm-validate/1.1.3)
+
+
+### ER Diagram
+The ER diagram can be found at [model/er_diagram.pdf](https://github.com/Roscode/mealthyme/blob/master/model/er_diagram.pdf)
 
 ### Data
 
