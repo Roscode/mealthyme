@@ -42,6 +42,6 @@
   (add-recipes filename)
   (add-ingredients filename))
 
-(add-all "panresponse")
+(add-all "pancake_recipes")
 
 (disconnect db-conn)
