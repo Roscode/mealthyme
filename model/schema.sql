@@ -1,4 +1,3 @@
--- drop schema if exists mealthyme;
 -- create schema mealthyme;
 use mealthyme;
 
@@ -148,17 +147,6 @@ WHERE
             pantry_contents
         WHERE
             user_id = uid);
-end //
-
-
-
-drop procedure if exists get_all_food //
-create procedure get_all_food()
-begin
-SELECT 
-    food_name
-FROM
-    foods;
 end //
 
 
